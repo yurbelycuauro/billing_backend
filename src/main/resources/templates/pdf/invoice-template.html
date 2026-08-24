@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      @page {
+        size: A4;
+        margin: 20mm;
+      }
+      body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: #333;
+        font-size: 11px;
+      }
+      .header-table {
+        width: 100%;
+        margin-bottom: 15px;
+      }
+      
+      /* Estilo agregado para controlar las dimensiones del logo */
+      .brand-logo {
+        max-width: 140px;
+        height: auto;
+        display: block;
+      }
+
+      .company-bar {
+        width: 100%;
+        background-color: #e8f5e9;
+        padding: 8px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        border-left: 4px solid #2e7d32;
+      }
+      .info-table,
+      .items-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 15px;
+      }
+      .info-table td {
+        padding: 4px 6px;
+        border: 1px solid #ccc;
+      }
+      .info-table .label {
+        background-color: #f5f5f5;
+        font-weight: bold;
+        width: 25%;
+      }
+      .items-table th {
+        background-color: #e8f5e9;
+        border: 1px solid #a5d6a7;
+        padding: 6px;
+        text-align: left;
+      }
+      .items-table td {
+        border: 1px solid #ddd;
+        padding: 6px;
+      }
+      .text-right {
+        text-align: right;
+      }
+      .text-center {
+        text-align: center;
+      }
+
+      .totals-table {
+        width: 40%;
+        margin-left: auto;
+        border-collapse: collapse;
+      }
+      .totals-table td {
+        padding: 5px;
+        border: 1px solid #ccc;
+      }
+      .totals-table .total-row {
+        font-weight: bold;
+        background-color: #f5f5f5;
+      }
+
+      /* Contenedor de 2 columnas */
+      .tables-container {
+        width: 100%;
+        margin-bottom: 15px;
+      }
+
+      .table-wrapper-left {
+        display: inline-block;
+        vertical-align: top;
+        width: 64%;
+        margin-right: 2%;
+      }
+
+      .table-wrapper-right {
+        display: inline-block;
+        vertical-align: top;
+        width: 33%;
+      }
+
+      .table-info-client {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .table-info-client td {
+        padding: 4px 6px;
+        border: 1px solid #ccc;
+        font-size: 11px;
+      }
+    </style>
+  </head>
+  <body>
+    <table class="header-table">
+      <tr>
+        <td>
+          <img
+            th:src="@{classpath:static/images/logo.png}"
+            alt="Celmedia"
+            class="brand-logo"
+          />
+        </td>
+        <td class="text-center">
+          <strong>PRE-FACTURA: </strong>
+          PRE-FACTURA SERVICIOS MENSAJERÍA SMS -
+          <br />
+          <span th:text="|${#strings.toUpperCase(invoice.mesPeriodo)} ${invoice.anioPeriodo}//${invoice.customerName}|">
+            ABRIL 2026//ZYTRUST
+          </span>
+        </td>
+      </tr>
+    </table>
+
+    <table class="company-bar">
+      <tr>
+        <td><strong>CELMEDIA SOCIEDAD ANONIMA</strong> - CELMEDIA S.A</td>
+      </tr>
+      <tr>
+        <td><strong>RUC:</strong> 20510454391</td>
+      </tr>
+      <tr>
+        <td><strong>Dirección:</strong> Av. Javier Prado 1234, Lima, Perú</td>
+      </tr>
+    </table>
+
+    <div class="tables-container">
+      <div class="table-wrapper-left">
+        <table class="table-info-client">
+          <tr>
+            <td><strong>Nombre</strong></td>
+            <td><span th:text="${invoice.customerName}">ZYTRUST SOCIEDAD ANONIMA</span></td>
+          </tr>
+          <tr>
+            <td><strong>RUC</strong></td>
+            <td><span th:text="${invoice.taxId}">20512321357</span></td>
+          </tr>
+          <tr>
+            <td><strong>Forma de pago</strong></td>
+            <td><span th:text="${invoice.payment.paymentMethod}" >Credito</span></td>
+          </tr>
+          <tr>
+            <td><strong>Plazo</strong></td>
+            <td><span th:text="${invoice.payment.termsDays}">30 días</span></td>
+          </tr>
+          <tr>
+            <td><strong>Moneda</strong></td>
+            <td><span th:text="${invoice.moneda.nombre}">Soles</span></td>
+          </tr>
+          <tr>
+            <td><strong>Observación</strong></td>
+            <td>
+              <span >INTERBANK - CTA. CTE. SOLES: 200-3002609027 / CCI: 003-200-003002609027-31</span>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Tipo de compro</strong></td>
+            <td><span >Factura</span></td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="table-wrapper-right">
+        <table class="table-info-client">
+          <tr>
+            <td><strong>Periodo</strong></td>
+            <td>
+              <span th:text="|${invoice.mesPeriodo}-${invoice.anioPeriodo}|">07-2026</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <table class="items-table">
+      <thead>
+        <tr>
+          
+          <th>Descripción</th>
+          <th class="text-right">Cantidad</th>
+          <th class="text-right">P. Unitario</th>
+          <th class="text-right">Monto</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="item : ${invoice.items}">
+          
+          <td th:text="${item.description}">AGROSMART OTP</td>
+          <td class="text-right" th:text="${item.quantity}">124</td>
+          <td
+            class="text-right"
+            th:text="${#numbers.formatDecimal(item.unitPrice, 1, 'POINT', 2, 'COMMA')}"
+          >
+            0.03
+          </td>
+          <td
+            class="text-right"
+            th:text="${#numbers.formatDecimal(item.amount, 1, 'POINT', 2, 'COMMA')}"
+          >
+            3.72
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="totals-table">
+      <tr>
+        <td class="label">Subtotal NETO</td>
+        <td
+          class="text-right"
+          th:text="${#numbers.formatDecimal(invoice.netSubtotal, 1, 'POINT', 2, 'COMMA')}"
+        >
+          8.79
+        </td>
+      </tr>
+      <tr>
+        <td class="label">IGV / Tax</td>
+        <td
+          class="text-right"
+          th:text="${#numbers.formatDecimal(invoice.taxAmount, 1, 'POINT', 2, 'COMMA')}"
+        >
+          1.58
+        </td>
+      </tr>
+      <tr class="total-row">
+        <td>TOTAL</td>
+        <td
+          class="text-right"
+          th:text="${#numbers.formatDecimal(invoice.totalAmount, 1, 'POINT', 2, 'COMMA')}"
+        >
+          10.37
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
