@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  # Servicio de Base de Datos MySQL
+  # Servicio de Base de Datos MySQL
+  mysqldb:
+    image: mysql:8.0
+    container_name: mysql_billing_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: billing_db
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: billing_user
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3307:3306"  # <-- Cambia 3306:3306 por 3307:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - billing-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Servicio de la API Spring Boot
+  api:
+    build: .
+    container_name: springboot_billing_api
+    restart: always
+    ports:
+      - "8081:8081"
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+    # Inyectamos el archivo .env completo al contenedor de la API
+    env_file:
+      - .env
+    environment:
+      # Conexión a la base de datos usando la variable del .env
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/billing_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: billing_user
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQLDialect
+      
+      # Mapeo explícito de variables para SendGrid/Mail en Spring Boot (Opcional si tu código las lee vía @Value o Dotenv)
+      SENDGRID_API_KEY: ${SENDGRID_API_KEY}
+      MAIL_FROM_ADDRESS: ${MAIL_FROM_ADDRESS}
+      SENDGRID_TO_EMAIL: ${SENDGRID_TO_EMAIL}
+    networks:
+      - billing-network
+
+volumes:
+  mysql_data:
+
+networks:
+  billing-network:
+    driver: bridge
