@@ -4,7 +4,6 @@ on:
   push:
     branches: [ "main" ]
 
-# Permisos requeridos obligatoriamente por WIF para solicitar el token OIDC
 permissions:
   contents: read
   id-token: write
@@ -31,7 +30,6 @@ jobs:
     - name: Compilar con Maven
       run: mvn clean package -DskipTests
 
-    # Autenticación segura usando Workload Identity Federation (WIF)
     - name: Autenticación en Google Cloud vía WIF
       uses: google-github-actions/auth@v2
       with:
@@ -49,7 +47,6 @@ jobs:
         docker build -t $GAR_LOCATION .
         docker push $GAR_LOCATION
 
-    # Despliegue Serverless con inyección de credenciales de Supabase
     - name: Desplegar en Cloud Run
       run: |
         gcloud run deploy billing-api \
