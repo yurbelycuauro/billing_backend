@@ -58,4 +58,4 @@ jobs:
             --platform managed \
             --allow-unauthenticated \
             --min-instances=0 \
-            --set-env-vars SPRING_DATASOURCE_URL="${{ secrets.SUPABASE_URL }}",SPRING_DATASOURCE_USERNAME="${{ secret.SPRING_DATASOURCE_USERNAME }}",SPRING_DATASOURCE_PASSWORD="${{ secrets.SUPABASE_PASS }}",SENDGRID_API_KEY="${{ secrets.SENDGRID_API_KEY }}",MAIL_FROM_ADDRESS="${{ secrets.MAIL_FROM_ADDRESS }}"
+            --set-env-vars SPRING_DATASOURCE_URL="${{ secrets.SUPABASE_URL }}",SPRING_DATASOURCE_USERNAME="${{ secrets.SPRING_DATASOURCE_USERNAME }}",SPRING_DATASOURCE_PASSWORD="${{ secrets.SUPABASE_PASS }}",SENDGRID_API_KEY="${{ secrets.SENDGRID_API_KEY }}",MAIL_FROM_ADDRESS="${{ secrets.MAIL_FROM_ADDRESS }}"
