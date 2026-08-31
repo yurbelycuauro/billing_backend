@@ -49,6 +49,12 @@ jobs:
           docker build -t ${{ env.IMAGE_URL }}:${{ github.sha }} -t ${{ env.IMAGE_URL }}:latest .
           docker push ${{ env.IMAGE_URL }}:${{ github.sha }}
           docker push ${{ env.IMAGE_URL }}:latest
+      - name: Debug secret format
+        run: |
+          echo "Username length: ${#SPRING_DATASOURCE_USERNAME}"
+          echo "Username has trailing whitespace: $(echo "$SPRING_DATASOURCE_USERNAME" | grep -c '[[:space:]]$')"
+        env:
+          SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
 
       - name: Desplegar en Cloud Run
         run: |
