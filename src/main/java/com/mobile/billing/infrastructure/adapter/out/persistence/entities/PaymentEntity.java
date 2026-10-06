@@ -19,7 +19,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "payments")
-public class PaymentEntity {
+public class PaymentEntity extends BaseJpaEntity {
    
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -35,14 +35,16 @@ public class PaymentEntity {
         if (payment == null) {
             return null;
         }
-        return new PaymentEntity(
+        PaymentEntity entity = new PaymentEntity(
             payment.getId(),
             payment.getPaymentMethod(),
             payment.getTermsDays()
         );
+        entity.setTenantId(payment.getTenantId());
+        return entity;
     }
 
     public Payment toDomain() {
-        return new Payment(id, paymentMethod, termsDays);
+        return new Payment(id, getTenantId(), paymentMethod, termsDays);
     }
 }

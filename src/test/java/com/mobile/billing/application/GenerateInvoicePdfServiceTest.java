@@ -1,10 +1,13 @@
 package com.mobile.billing.application;
 
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import org.mockito.ArgumentCaptor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -35,18 +38,27 @@ class GenerateInvoicePdfServiceTest {
         InvoicePdfExporterUseCase pdfExporter = mock(InvoicePdfExporterUseCase.class);
         PaymentRepositoryPort paymentRepositoryPort = mock(PaymentRepositoryPort.class);
 
-        GenerateInvoicePdfService service = new GenerateInvoicePdfService(getCustomerUseCase, pdfExporter, paymentRepositoryPort);
+        GenerateInvoicePdfService service = new GenerateInvoicePdfService(getCustomerUseCase, pdfExporter,
+                paymentRepositoryPort);
 
         List<InvoiceItem> items = List.of(new InvoiceItem(null, "Servicio", 1, BigDecimal.TEN, 100L));
         GenerateInvoicePdfUseCase.GenerateInvoicePdfCommand command = new GenerateInvoicePdfUseCase.GenerateInvoicePdfCommand(
-            1L, 2026, 6, 1L, Moneda.PEN, Pais.PE, items);
+                1L, 2026, 6, 1L, Moneda.PEN, Pais.PE, items);
         Customer customer = Customer.create("12345678", "Acme S.A.", "contacto@acme.com");
-        byte[] expectedPdf = new byte[] {1, 2, 3};
+        byte[] expectedPdf = new byte[] { 1, 2, 3 };
         when(getCustomerUseCase.getCustomerById(1L)).thenReturn(Optional.of(customer));
         when(pdfExporter.generateInvoicePdf(any(InvoiceResponse.class))).thenReturn(expectedPdf);
 
         byte[] result = service.generateInvoicePdf(command);
 
+        ArgumentCaptor<InvoiceResponse> captor = ArgumentCaptor.forClass(InvoiceResponse.class);
+        verify(pdfExporter).generateInvoicePdf(captor.capture());
+        InvoiceResponse invoiceResponse = captor.getValue();
+
         assertSame(expectedPdf, result);
+        assertEquals("Acme S.A.", invoiceResponse.customerName());
+        assertEquals("12345678", invoiceResponse.taxId());
+        assertEquals("Junio", invoiceResponse.mesPeriodo());
+        assertEquals(Pais.PE, invoiceResponse.pais());
     }
 }

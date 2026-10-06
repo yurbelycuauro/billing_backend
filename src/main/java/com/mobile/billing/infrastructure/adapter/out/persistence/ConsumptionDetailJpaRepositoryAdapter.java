@@ -1,7 +1,9 @@
 package com.mobile.billing.infrastructure.adapter.out.persistence;
 
 import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -36,7 +38,9 @@ public class ConsumptionDetailJpaRepositoryAdapter implements ConsumptionDetailR
 
     @Override
     public List<ConsumptionDetail> saveAll(List<ConsumptionDetail> consumptionDetails) {
+        Set<DuplicateKey> batchKeys = new HashSet<>();
         List<ConsumptionDetailEntity> entitiesToSave = consumptionDetails.stream()
+            .filter(detail -> batchKeys.add(DuplicateKey.from(detail)))
                 .filter(this::isNotDuplicate)
                 .map(ConsumptionDetailEntity::fromDomain)
                 .collect(Collectors.toList());
@@ -70,6 +74,38 @@ public class ConsumptionDetailJpaRepositoryAdapter implements ConsumptionDetailR
 
        
         return !exists;
+    }
+
+    private record DuplicateKey(
+            Integer periodYear,
+            Integer periodMonth,
+            String clientName,
+            String serviceName,
+            String commercialName,
+            String direction,
+            String type,
+            String marking,
+            String provider,
+            java.math.BigDecimal saleAmount
+    ) {
+        private static DuplicateKey from(ConsumptionDetail detail) {
+            if (detail == null) {
+                return null;
+            }
+
+            return new DuplicateKey(
+                    detail.getPeriodYear(),
+                    detail.getPeriodMonth(),
+                    detail.getClientName(),
+                    detail.getServiceName(),
+                    detail.getCommercialName(),
+                    detail.getDirection(),
+                    detail.getType(),
+                    detail.getMarking(),
+                    detail.getProvider(),
+                    detail.getSaleAmount()
+            );
+        }
     }
 
     @Override

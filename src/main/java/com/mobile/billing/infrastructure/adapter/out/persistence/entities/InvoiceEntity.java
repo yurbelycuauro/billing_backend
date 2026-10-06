@@ -17,6 +17,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
@@ -33,13 +34,15 @@ import com.mobile.billing.domain.model.Invoice;
 import com.mobile.billing.domain.model.InvoiceItem;
 
 @Entity
-@Table(name = "invoices")
+@Table(name = "invoices", uniqueConstraints = {
+    @UniqueConstraint(name = "uk_invoice_tenant_number", columnNames = {"tenant_id", "invoice_number"})
+})
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(exclude = "items")
-public class InvoiceEntity {
+public class InvoiceEntity extends BaseJpaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -110,6 +113,7 @@ public class InvoiceEntity {
             invoice.getMoneda(),
             invoice.getPais()
         );
+        entity.setTenantId(invoice.getTenantId());
 
         if (invoice.getItems() != null) {
             entity.items = invoice.getItems().stream()
@@ -133,6 +137,7 @@ public class InvoiceEntity {
         Long paymentId = payment != null ? payment.getId() : null;
         return new Invoice(
             id,
+            getTenantId(),
             customerId,
             invoiceNumber,
             anioPeriodo,

@@ -11,6 +11,7 @@ import lombok.Getter;
 public class Invoice {
 
     private final Long id;
+    private Long tenantId;
     private Long customerId;
     private String invoiceNumber;
     private Integer anioPeriodo;
@@ -38,9 +39,27 @@ public class Invoice {
         Long paymentId,
         Moneda moneda, // 👈 Tu Enum directamente aquí
         Pais pais
-        
+    ) {
+        this(id, null, customerId, invoiceNumber, anioPeriodo, mesPeriodo, status, issueDate, items, taxRate, paymentId, moneda, pais);
+    }
+
+    public Invoice(
+        Long id,
+        Long tenantId,
+        Long customerId,
+        String invoiceNumber,
+        Integer anioPeriodo,
+        Integer mesPeriodo,
+        InvoiceStatus status,
+        LocalDateTime issueDate,
+        List<InvoiceItem> items,
+        BigDecimal taxRate,
+        Long paymentId,
+        Moneda moneda,
+        Pais pais
     ) {
         this.id = id;
+        this.tenantId = tenantId;
         this.customerId = customerId;
         this.invoiceNumber = invoiceNumber;
         this.anioPeriodo = anioPeriodo;

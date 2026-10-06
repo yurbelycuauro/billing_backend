@@ -23,7 +23,7 @@ import com.mobile.billing.domain.model.InvoiceItem;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class InvoiceItemEntity {
+public class InvoiceItemEntity extends BaseJpaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,7 +52,7 @@ public class InvoiceItemEntity {
         if (item == null) {
             return null;
         }
-        return new InvoiceItemEntity(
+        InvoiceItemEntity entity = new InvoiceItemEntity(
             item.getId(),
             invoice,
             item.getDescription(),
@@ -61,6 +61,10 @@ public class InvoiceItemEntity {
             item.getAmount(),
             item.getConsumptionDetailId()
         );
+        if (invoice != null) {
+            entity.setTenantId(invoice.getTenantId());
+        }
+        return entity;
     }
 
     public InvoiceItem toDomain() {

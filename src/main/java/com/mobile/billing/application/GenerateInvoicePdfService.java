@@ -23,44 +23,45 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GenerateInvoicePdfService implements GenerateInvoicePdfUseCase {
 
-    private final GetCustomerUseCase getCustomerUseCase;
-    private final InvoicePdfExporterUseCase invoicePdfExporterUseCase;
-    private final PaymentRepositoryPort paymentRepositoryPort;
+        private final GetCustomerUseCase getCustomerUseCase;
+        private final InvoicePdfExporterUseCase invoicePdfExporterUseCase;
+        private final PaymentRepositoryPort paymentRepositoryPort;
 
-    @Override
-    public byte[] generateInvoicePdf(GenerateInvoicePdfCommand command) {
-        Customer customer = getCustomerUseCase.getCustomerById(command.clientId())
-                .orElseThrow(() -> new IllegalArgumentException("Customer not found with ID: " + command.clientId()));
+        @Override
+        public byte[] generateInvoicePdf(GenerateInvoicePdfCommand command) {
+                Customer customer = getCustomerUseCase.getCustomerById(command.clientId())
+                                .orElseThrow(() -> new IllegalArgumentException(
+                                                "Customer not found with ID: " + command.clientId()));
 
-        List<InvoiceItem> items = command.items() == null ? List.of() : command.items();
-        BigDecimal netSubtotal = items.stream()
-                .map(InvoiceItem::getAmount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        BigDecimal taxAmount = netSubtotal.multiply(command.pais().getTasaImpuesto());
-        BigDecimal totalAmount = netSubtotal.add(taxAmount);
-        Payment payment = command.paymentId() == null
-                ? null
-                : paymentRepositoryPort.getById(command.paymentId()).orElse(null);
+                List<InvoiceItem> items = command.items() == null ? List.of() : command.items();
+                BigDecimal netSubtotal = items.stream()
+                                .map(InvoiceItem::getAmount)
+                                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        InvoiceResponse invoiceResponse = new InvoiceResponse(
-                null,
-                customer.getId(),
-                "PREVIEW-" + System.currentTimeMillis(),
-                command.anioPeriodo(),
-                MonthStringToIntConverter.obtenerNombreMes(command.mesPeriodo()),
-                InvoiceStatus.DRAFT,
-                LocalDateTime.now(),
-                items,
-                netSubtotal,
-                taxAmount,
-                totalAmount,
-                customer.getBusinessName(),
-                customer.getTaxId(),
-                command.moneda(),
-                command.pais(),
-                payment
-        );
+                BigDecimal taxAmount = netSubtotal.multiply(command.pais().getTasaImpuesto());
+                BigDecimal totalAmount = netSubtotal.add(taxAmount);
+                Payment payment = command.paymentId() == null
+                                ? null
+                                : paymentRepositoryPort.getById(command.paymentId()).orElse(null);
 
-        return invoicePdfExporterUseCase.generateInvoicePdf(invoiceResponse);
-    }
+                InvoiceResponse invoiceResponse = new InvoiceResponse(
+                                null,
+                                customer.getId(),
+                                "PREVIEW-" + System.currentTimeMillis(),
+                                command.anioPeriodo(),
+                                MonthStringToIntConverter.obtenerNombreMes(command.mesPeriodo()),
+                                InvoiceStatus.DRAFT,
+                                LocalDateTime.now(),
+                                items,
+                                netSubtotal,
+                                taxAmount,
+                                totalAmount,
+                                customer.getBusinessName(),
+                                customer.getTaxId(),
+                                command.moneda(),
+                                command.pais(),
+                                payment);
+
+                return invoicePdfExporterUseCase.generateInvoicePdf(invoiceResponse);
+        }
 }

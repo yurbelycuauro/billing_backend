@@ -28,7 +28,8 @@ class CreateCustomerServiceTest {
         Customer savedCustomer = new Customer(1L, "12345678", "Acme S.A.", "contacto@acme.com", true);
         when(repository.save(any(Customer.class))).thenReturn(savedCustomer);
 
-        Long id = service.createCustomer(new CreateCustomerCommand("Acme S.A.", "Perú", "contacto@acme.com", "12345678", "12345678"));
+        Long id = service.createCustomer(
+                new CreateCustomerCommand("Acme S.A.", "contacto@acme.com", "12345678"));
 
         assertEquals(1L, id);
         verify(repository).save(any(Customer.class));
@@ -42,7 +43,23 @@ class CreateCustomerServiceTest {
         Customer existingCustomer = new Customer(7L, "87654321", "Beta S.A.", "info@beta.com", true);
         when(repository.findByBusinessName("Beta S.A.")).thenReturn(Optional.of(existingCustomer));
 
-        Long id = service.createCustomer(new CreateCustomerCommand("Beta S.A.", "Perú", "info@beta.com", "87654321", "87654321"));
+        Long id = service.createCustomer(
+                new CreateCustomerCommand("Beta S.A.", "info@beta.com", "87654321"));
+
+        assertEquals(existingCustomer.getId(), id);
+        verify(repository, never()).save(any(Customer.class));
+    }
+
+    @Test
+    void shouldNotCreateCustomerWhenTaxIdAlreadyExists() {
+        CustomerRepositoryPort repository = mock(CustomerRepositoryPort.class);
+        CreateCustomerService service = new CreateCustomerService(repository);
+
+        Customer existingCustomer = new Customer(11L, "Alo45", "Alo S.A.", "contacto@alo.com", true);
+        when(repository.findByTaxId("Alo45")).thenReturn(Optional.of(existingCustomer));
+
+        Long id = service
+                .createCustomer(new CreateCustomerCommand("Alo S.A.", "contacto@alo.com", "Alo45"));
 
         assertEquals(existingCustomer.getId(), id);
         verify(repository, never()).save(any(Customer.class));

@@ -7,9 +7,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mobile.billing.domain.model.Invoice;
 import com.mobile.billing.domain.model.InvoiceStatus;
+import com.mobile.billing.domain.model.Tenant;
 import com.mobile.billing.domain.ports.in.CreateInvoiceUseCase;
 import com.mobile.billing.domain.ports.out.CustomerRepositoryPort; // <-- Necesario para el nombre
 import com.mobile.billing.domain.ports.out.InvoiceRepositoryPort;
+import com.mobile.billing.domain.ports.out.TenantContextPort;
+import com.mobile.billing.domain.ports.out.TenantRepositoryPort;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,15 +22,19 @@ public class CreateInvoiceService implements CreateInvoiceUseCase {
 
     private final InvoiceRepositoryPort invoiceRepository;
     private final CustomerRepositoryPort customerRepository; // Puerto para obtener el cliente
-    
+    private final TenantContextPort tenantContext;
+    private final TenantRepositoryPort tenantRepository;
 
     @Override
     @Transactional // Garantiza consistencia en la base de datos
     public Invoice generateInvoice(GenerateInvoiceCommand command) {
-        
-       
-        String nombreCliente = customerRepository.findNameById(command.clientId())
-                .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado con ID: " + command.clientId()));
+        Long tenantId = tenantContext.getTenantId();
+        if (tenantId == null) {
+            throw new IllegalStateException("Tenant context is required to generate an invoice.");
+        }
+        Tenant tenant = tenantRepository.findById(tenantId)
+                .orElseThrow(() -> new IllegalArgumentException("Tenant not found."));
+        BigDecimal taxRate = tenant.getTaxRate().divide(BigDecimal.valueOf(100));
 
         // 2. Instanciar la entidad de dominio Invoice con los ítems recibidos.
         String generatedInvoiceNumber = "INV-" + System.currentTimeMillis();
@@ -40,15 +47,13 @@ public class CreateInvoiceService implements CreateInvoiceUseCase {
                 InvoiceStatus.DRAFT,
                 LocalDateTime.now(),
                 command.items(),
-                BigDecimal.valueOf(0.18),
-               command.paymentId(),
-               command.moneda(),
-               command.pais()
-        );
+                taxRate,
+                command.paymentId(),
+                command.moneda(),
+                command.pais());
 
         // 3. Guardar y retornar la factura persistida
         return invoiceRepository.save(invoice);
     }
 
-   
 }

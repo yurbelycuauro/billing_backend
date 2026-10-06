@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import com.mobile.billing.domain.model.Invoice;
@@ -58,22 +60,24 @@ public class InvoiceJpaRepositoryAdapter implements InvoiceRepositoryPort {
     }
 
     @Override
-    public List<Invoice> findByPeriodYearAndPeriodMonth(Integer periodYear, Integer periodMonth) {
+    public Page<Invoice> findByPeriodYearAndPeriodMonth(Integer periodYear, Integer periodMonth, Pageable pageable) {
         LocalDateTime start = LocalDateTime.of(periodYear, periodMonth, 1, 0, 0);
         LocalDateTime end = start.plusMonths(1);
-        return invoiceRepository.findByIssueDateBetween(start, end).stream()
-                .map(InvoiceEntity::toDomain)
-                .collect(Collectors.toList());
+        return invoiceRepository.findByIssueDateBetween(start, end, pageable).map(InvoiceEntity::toDomain);
     }
 
     @Override
-    public List<Invoice> findByPeriodYearAndPeriodMonthAndCustomerId(
-            Integer periodYear, Integer periodMonth, Long customerId
+    public Page<Invoice> findByPeriodYearAndPeriodMonthAndCustomerId(
+            Integer periodYear, Integer periodMonth, Long customerId, Pageable pageable
     ) {
         LocalDateTime start = LocalDateTime.of(periodYear, periodMonth, 1, 0, 0);
         LocalDateTime end = start.plusMonths(1);
-        return invoiceRepository.findByCustomer_IdAndIssueDateBetween(customerId, start, end).stream()
-                .map(InvoiceEntity::toDomain)
-                .collect(Collectors.toList());
+        return invoiceRepository.findByCustomer_IdAndIssueDateBetween(customerId, start, end, pageable).map(InvoiceEntity::toDomain);
+                
+    }
+
+    @Override
+    public Page<Invoice> findAll(Integer year, Pageable pageable) {
+       return invoiceRepository.findByAnioPeriodo(year, pageable).map(InvoiceEntity::toDomain);
     }
 }

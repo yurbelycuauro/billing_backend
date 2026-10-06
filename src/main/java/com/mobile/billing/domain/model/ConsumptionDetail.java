@@ -7,6 +7,7 @@ import lombok.Getter;
 public class ConsumptionDetail {
 
     private final Long id;
+    private Long tenantId;
     private Integer periodYear;
     private Integer periodMonth;
     private String country;
@@ -61,9 +62,41 @@ public class ConsumptionDetail {
        
         DataSource dataSource
     ) {
+        this(id, null, periodYear, periodMonth, country, costCenter, clientName, serviceName, commercialName,
+            direction, type, marking, provider, traffic, dollarSaleRate, salePrice, saleAmount, dollarCostRate,
+            costPrice, totalCost, margin, billable, billableReason, dataSource);
+    }
+
+    public ConsumptionDetail(
+        Long id,
+        Long tenantId,
+        Integer periodYear,
+        Integer periodMonth,
+        String country,
+        String costCenter,
+        String clientName,
+        String serviceName,
+        String commercialName,
+        String direction,
+        String type,
+        String marking,
+        String provider,
+        Integer traffic,
+        BigDecimal dollarSaleRate,
+        BigDecimal salePrice,
+        BigDecimal saleAmount,
+        BigDecimal dollarCostRate,
+        BigDecimal costPrice,
+        BigDecimal totalCost,
+        BigDecimal margin,
+        boolean billable,
+        String billableReason,
+        DataSource dataSource
+    ) {
        // validateInputs(serviceName, messageCount, unitPrice, periodYear, periodMonth, dataSource);
         
         this.id = id;
+        this.tenantId = tenantId;
         this.periodYear = periodYear;
         this.periodMonth = periodMonth;
         this.country = country;

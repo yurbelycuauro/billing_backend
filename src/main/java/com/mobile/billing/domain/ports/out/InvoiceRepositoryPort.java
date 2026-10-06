@@ -7,6 +7,9 @@ import com.mobile.billing.domain.model.Invoice;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 public interface InvoiceRepositoryPort {
 
 
@@ -16,11 +19,14 @@ public interface InvoiceRepositoryPort {
 
     List<Invoice> findAll();
 
-    List<Invoice> findByPeriodYearAndPeriodMonth(Integer periodYear, Integer periodMonth);
+    Page<Invoice> findByPeriodYearAndPeriodMonth(Integer periodYear, Integer periodMonth, Pageable pageable);
 
-    List<Invoice> findByPeriodYearAndPeriodMonthAndCustomerId(
+    Page<Invoice> findByPeriodYearAndPeriodMonthAndCustomerId(
         Integer periodYear, 
         Integer periodMonth, 
-        Long customerId
+        Long customerId, 
+        Pageable pageable
     );
+
+    Page<Invoice> findAll(Integer year, Pageable pageable);
 }

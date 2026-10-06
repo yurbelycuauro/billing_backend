@@ -5,18 +5,27 @@ import lombok.Getter;
 @Getter
 public class Customer {
     private final Long id;
+    private Long tenantId;
     private String taxId; // RUC / NIT
     private String businessName;
     private String notificationEmail;
     private boolean active;
 
-    public Customer (Long id, String taxId, String businessName, String notificationEmail, boolean active) {
+    public Customer(Long id, String taxId, String businessName, String notificationEmail, boolean active) {
+        this(id, null, taxId, businessName, notificationEmail, active);
+    }
+
+    public Customer(Long id, Long tenantId, String taxId, String businessName, String notificationEmail,
+            boolean active) {
         // 🔒 VALIDACIONES DE NEGOCIO (Invariantes)
-        validateTaxId(taxId);
+        if (taxId != null && taxId.isBlank()) {
+            throw new IllegalArgumentException("El RUC/NIT (taxId) no puede estar vacío cuando se envía.");
+        }
         validateBusinessName(businessName);
         validateEmail(notificationEmail);
 
         this.id = id;
+        this.tenantId = tenantId;
         this.taxId = taxId;
         this.businessName = businessName;
         this.notificationEmail = notificationEmail;
@@ -26,7 +35,10 @@ public class Customer {
 
     public static Customer create(String taxId, String businessName, String notificationEmail) {
         return new Customer(null, taxId, businessName, notificationEmail, true);
+    }
 
+    public static Customer create(Long tenantId, String taxId, String businessName, String notificationEmail) {
+        return new Customer(null, tenantId, taxId, businessName, notificationEmail, true);
     }
 
     public void update(String taxId, String businessName, String notificationEmail) {
@@ -43,8 +55,8 @@ public class Customer {
 
     // --- Métodos Privados de Validación ---
     private void validateTaxId(String taxId) {
-        if (taxId == null || taxId.isBlank()) {
-            throw new IllegalArgumentException("El RUC/NIT (taxId) es obligatorio.");
+        if (taxId != null && taxId.isBlank()) {
+            throw new IllegalArgumentException("El RUC/NIT (taxId) no puede estar vacío cuando se envía.");
         }
     }
 
@@ -59,9 +71,5 @@ public class Customer {
             throw new IllegalArgumentException("El correo de notificación no es válido.");
         }
     }
-
-    
-    
-
 
 }

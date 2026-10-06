@@ -25,6 +25,7 @@ import lombok.Setter;
         columnNames = {
             "period_year",
             "period_month",
+            "tenant_id",
             "client_name",
             "service_name",
             "commercial_name",
@@ -40,7 +41,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ConsumptionDetailEntity {
+public class ConsumptionDetailEntity extends BaseJpaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -112,7 +113,7 @@ public class ConsumptionDetailEntity {
         if (detail == null) {
             return null;
         }
-        return new ConsumptionDetailEntity(
+        ConsumptionDetailEntity entity = new ConsumptionDetailEntity(
             detail.getId(),
             detail.getPeriodYear(),
             detail.getPeriodMonth(),
@@ -138,12 +139,15 @@ public class ConsumptionDetailEntity {
             detail.getBillableReason(),
             detail.getDataSource()
         );
+        entity.setTenantId(detail.getTenantId());
+        return entity;
         
     }
 
     public ConsumptionDetail toDomain() {
         return new com.mobile.billing.domain.model.ConsumptionDetail(
             id,
+            getTenantId(),
             periodYear,
             periodMonth,
             country,
