@@ -116,7 +116,7 @@
         <td>
           <img
             th:src="@{classpath:static/images/logo.png}"
-            alt="Celmedia"
+            th:alt="${tenant.companyName}"
             class="brand-logo"
           />
         </td>
@@ -133,13 +133,13 @@
 
     <table class="company-bar">
       <tr>
-        <td><strong>CELMEDIA SOCIEDAD ANONIMA</strong> - CELMEDIA S.A</td>
+        <td><strong th:text="${tenant.companyName}">Nombre de la empresa</strong></td>
       </tr>
       <tr>
-        <td><strong>RUC:</strong> 20510454391</td>
+        <td><strong>Identificación fiscal:</strong> <span th:text="${tenant.taxId}">Número de identificación</span></td>
       </tr>
       <tr>
-        <td><strong>Dirección:</strong> Av. Javier Prado 1234, Lima, Perú</td>
+        <td><strong>Dirección:</strong> <span th:text="${tenant.address}">Dirección fiscal</span></td>
       </tr>
     </table>
 
@@ -164,12 +164,12 @@
           </tr>
           <tr>
             <td><strong>Moneda</strong></td>
-            <td><span th:text="${invoice.moneda.nombre}">Soles</span></td>
+            <td><span th:text="${invoice.moneda}">USD</span></td>
           </tr>
           <tr>
             <td><strong>Observación</strong></td>
             <td>
-              <span >INTERBANK - CTA. CTE. SOLES: 200-3002609027 / CCI: 003-200-003002609027-31</span>
+              <span th:text="${tenant.bankAccount}">Cuenta bancaria</span>
             </td>
           </tr>
           <tr>

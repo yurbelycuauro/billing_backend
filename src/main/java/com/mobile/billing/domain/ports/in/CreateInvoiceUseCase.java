@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.mobile.billing.domain.model.Invoice;
 import com.mobile.billing.domain.model.InvoiceItem;
-import com.mobile.billing.domain.model.Moneda;
-import com.mobile.billing.domain.model.Pais;
 
 public interface CreateInvoiceUseCase {
 
@@ -16,13 +14,12 @@ public interface CreateInvoiceUseCase {
         Integer anioPeriodo,
         Integer mesPeriodo,
         Long paymentId,
-        Moneda moneda,
-        Pais pais,
+        String moneda,
         List<InvoiceItem> items
     ) {
         public GenerateInvoiceCommand(Long clientId, Integer anioPeriodo, Integer mesPeriodo,
-                Long paymentId, Moneda moneda, Pais pais) {
-            this(clientId, anioPeriodo, mesPeriodo, paymentId, moneda, pais, null);
+                Long paymentId, String moneda) {
+            this(clientId, anioPeriodo, mesPeriodo, paymentId, moneda, null);
         }
     }
 

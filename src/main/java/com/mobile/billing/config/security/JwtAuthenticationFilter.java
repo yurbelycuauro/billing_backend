@@ -61,8 +61,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private Long resolveTenantId(HttpServletRequest request, String token) {
         Long tenantId = jwtProvider.getTenantId(token);
         Set<String> roles = jwtProvider.getRoles(token);
+        boolean admin = roles.contains(ADMIN_ROLE);
+        boolean adminTenantHeaderSent = request.getHeader(ADMIN_TENANT_HEADER) != null;
 
-        if (roles.contains(ADMIN_ROLE)) {
+        logger.info("JWT request: admin=" + admin + ", " + ADMIN_TENANT_HEADER + " enviado="
+                + adminTenantHeaderSent);
+
+        if (admin) {
             return extractAdminTenantId(request, tenantId);
         }
 

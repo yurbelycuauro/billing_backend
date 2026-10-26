@@ -41,4 +41,12 @@ public class PaymentJpaRepositoryAdapter implements PaymentRepositoryPort {
                 .map(PaymentEntity::toDomain)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Payment> getByTenantId(Long tenantId) {
+        return repository.findByTenantId(tenantId).stream()
+                .map(PaymentEntity::toDomain)
+                .collect(Collectors.toList());
+
+    }
 }

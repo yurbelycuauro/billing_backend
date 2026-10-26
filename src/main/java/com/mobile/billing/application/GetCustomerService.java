@@ -9,13 +9,14 @@ import com.mobile.billing.domain.model.Customer;
 import com.mobile.billing.domain.ports.in.GetCustomerUseCase;
 import com.mobile.billing.domain.ports.out.CustomerRepositoryPort;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class GetCustomerService implements GetCustomerUseCase {
 
     private final CustomerRepositoryPort customerRepository;
+
+    public GetCustomerService(CustomerRepositoryPort customerRepository) {
+        this.customerRepository = customerRepository;
+    }
 
     @Override
     public Optional<Customer> getCustomerById(Long customerId) {

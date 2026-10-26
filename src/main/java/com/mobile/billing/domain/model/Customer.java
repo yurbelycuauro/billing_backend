@@ -42,15 +42,21 @@ public class Customer {
     }
 
     public void update(String taxId, String businessName, String notificationEmail) {
+        validateTaxId(taxId);
+        validateBusinessName(businessName);
+        validateEmail(notificationEmail);
         this.taxId = taxId;
         this.businessName = businessName;
         this.notificationEmail = notificationEmail;
-
     }
 
     public void deactivate() {
         this.active = false;
 
+    }
+
+    public void activate() {
+        this.active = true;
     }
 
     // --- Métodos Privados de Validación ---

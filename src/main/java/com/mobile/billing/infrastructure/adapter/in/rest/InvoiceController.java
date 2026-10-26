@@ -19,16 +19,23 @@ import com.mobile.billing.infrastructure.adapter.in.rest.dto.InvoiceRequest;
 import com.mobile.billing.infrastructure.adapter.in.rest.dto.InvoiceResponse;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/invoices")
-@RequiredArgsConstructor
 public class InvoiceController {
 
         private final GenerateInvoicePdfUseCase generateInvoicePdfUseCase;
         private final CreateInvoiceUseCase createInvoiceUseCase;
         private final GetInvoiceUseCase getInvoiceUseCase;
+
+        public InvoiceController(
+                        GenerateInvoicePdfUseCase generateInvoicePdfUseCase,
+                        CreateInvoiceUseCase createInvoiceUseCase,
+                        GetInvoiceUseCase getInvoiceUseCase) {
+                this.generateInvoicePdfUseCase = generateInvoicePdfUseCase;
+                this.createInvoiceUseCase = createInvoiceUseCase;
+                this.getInvoiceUseCase = getInvoiceUseCase;
+        }
 
         @GetMapping(value = "/{invoiceId}", produces = MediaType.APPLICATION_JSON_VALUE)
         public ResponseEntity<InvoiceResponse> getInvoiceById(@PathVariable Long invoiceId) {
@@ -79,7 +86,7 @@ public class InvoiceController {
         public ResponseEntity<byte[]> generateInvoicePdf(@Valid @RequestBody GenerateInvoicePdfRequest request) {
                 GenerateInvoicePdfCommand command = new GenerateInvoicePdfCommand(
                                 request.clientId(), request.anioPeriodo(), request.mesPeriodo(), request.paymentId(),
-                                request.moneda(), request.pais(), request.items());
+                                request.moneda(), request.items());
 
                 byte[] pdfContent = generateInvoicePdfUseCase.generateInvoicePdf(command);
 
@@ -96,7 +103,7 @@ public class InvoiceController {
         public ResponseEntity<InvoiceResponse> createInvoice(@Valid @RequestBody InvoiceRequest request) {
                 CreateInvoiceUseCase.GenerateInvoiceCommand command = new CreateInvoiceUseCase.GenerateInvoiceCommand(
                                 request.clientId(), request.anioPeriodo(), request.mesPeriodo(), request.paymentId(),
-                                request.moneda(), request.pais(), request.items());
+                                request.moneda(), request.items());
 
                 var invoiceCreated = createInvoiceUseCase.generateInvoice(command);
 

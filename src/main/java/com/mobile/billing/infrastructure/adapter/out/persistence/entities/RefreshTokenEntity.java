@@ -10,18 +10,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "refresh_tokens")
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Getter
 @Setter
 public class RefreshTokenEntity extends BaseJpaEntity {
+
+    public RefreshTokenEntity() {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +36,13 @@ public class RefreshTokenEntity extends BaseJpaEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
+
+    public RefreshTokenEntity(Long id, String token, Instant expiryDate, UserEntity user) {
+        this.id = id;
+        this.token = token;
+        this.expiryDate = expiryDate;
+        this.user = user;
+    }
 
     public RefreshTokenEntity(String token, Instant expiryDate, UserEntity user) {
         this.token = token;

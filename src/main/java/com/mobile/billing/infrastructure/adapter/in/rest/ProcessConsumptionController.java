@@ -22,15 +22,20 @@ import com.mobile.billing.domain.ports.in.ProcessConsumptionUseCase;
 import com.mobile.billing.infrastructure.adapter.in.rest.dto.ConsumptionDetailRequest;
 
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/consumption")
-@AllArgsConstructor
 public class ProcessConsumptionController {
 
     private final ProcessConsumptionUseCase processConsumptionUseCase;
     private final GetConsumptionDetailUseCase getConsumptionDetailUseCase;
+
+    public ProcessConsumptionController(
+            ProcessConsumptionUseCase processConsumptionUseCase,
+            GetConsumptionDetailUseCase getConsumptionDetailUseCase) {
+        this.processConsumptionUseCase = processConsumptionUseCase;
+        this.getConsumptionDetailUseCase = getConsumptionDetailUseCase;
+    }
 
     @PostMapping(path = "/excel", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> processExcelConsumption(

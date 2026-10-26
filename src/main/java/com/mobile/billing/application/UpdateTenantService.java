@@ -6,13 +6,14 @@ import com.mobile.billing.domain.model.Tenant;
 import com.mobile.billing.domain.ports.in.UpdateTenantUseCase;
 import com.mobile.billing.domain.ports.out.TenantRepositoryPort;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class UpdateTenantService implements UpdateTenantUseCase {
 
     private final TenantRepositoryPort tenantRepository;
+
+    public UpdateTenantService(TenantRepositoryPort tenantRepository) {
+        this.tenantRepository = tenantRepository;
+    }
 
     @Override
     public Tenant execute(UpdateTenantCommand command) {

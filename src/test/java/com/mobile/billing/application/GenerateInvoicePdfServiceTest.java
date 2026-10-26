@@ -20,14 +20,13 @@ import com.mobile.billing.domain.model.Customer;
 import com.mobile.billing.domain.model.InvoiceItem;
 
 import com.mobile.billing.domain.model.InvoiceStatus;
-import com.mobile.billing.domain.model.Moneda;
-import com.mobile.billing.domain.model.Pais;
-import com.mobile.billing.domain.ports.in.CreateInvoiceUseCase;
-import com.mobile.billing.domain.ports.in.CreateInvoiceUseCase.GenerateInvoiceCommand;
+import com.mobile.billing.domain.model.Tenant;
 import com.mobile.billing.domain.ports.in.GenerateInvoicePdfUseCase;
 import com.mobile.billing.domain.ports.in.GetCustomerUseCase;
 import com.mobile.billing.domain.ports.in.InvoicePdfExporterUseCase;
 import com.mobile.billing.domain.ports.out.PaymentRepositoryPort;
+import com.mobile.billing.domain.ports.out.TenantContextPort;
+import com.mobile.billing.domain.ports.out.TenantRepositoryPort;
 import com.mobile.billing.infrastructure.adapter.in.rest.dto.InvoiceResponse;
 
 class GenerateInvoicePdfServiceTest {
@@ -37,28 +36,48 @@ class GenerateInvoicePdfServiceTest {
         GetCustomerUseCase getCustomerUseCase = mock(GetCustomerUseCase.class);
         InvoicePdfExporterUseCase pdfExporter = mock(InvoicePdfExporterUseCase.class);
         PaymentRepositoryPort paymentRepositoryPort = mock(PaymentRepositoryPort.class);
+        TenantContextPort tenantContext = mock(TenantContextPort.class);
+        TenantRepositoryPort tenantRepository = mock(TenantRepositoryPort.class);
 
         GenerateInvoicePdfService service = new GenerateInvoicePdfService(getCustomerUseCase, pdfExporter,
-                paymentRepositoryPort);
+                paymentRepositoryPort, tenantContext, tenantRepository);
 
         List<InvoiceItem> items = List.of(new InvoiceItem(null, "Servicio", 1, BigDecimal.TEN, 100L));
         GenerateInvoicePdfUseCase.GenerateInvoicePdfCommand command = new GenerateInvoicePdfUseCase.GenerateInvoicePdfCommand(
-                1L, 2026, 6, 1L, Moneda.PEN, Pais.PE, items);
+                1L, 2026, 6, 1L, "PEN", items);
         Customer customer = Customer.create("12345678", "Acme S.A.", "contacto@acme.com");
         byte[] expectedPdf = new byte[] { 1, 2, 3 };
+        Tenant tenant = new Tenant(
+                42L,
+                "PE",
+                "Company",
+                "tax-id",
+                new BigDecimal("0.19"),
+                "PEN",
+                "address",
+                "phone",
+                "INTERBANK - CTA. CTE. SOLES: 200-3002609027 / CCI: 003-200-003002609027-31",
+                true);
+        when(tenantContext.getTenantId()).thenReturn(42L);
+        when(tenantRepository.findById(42L)).thenReturn(Optional.of(tenant));
         when(getCustomerUseCase.getCustomerById(1L)).thenReturn(Optional.of(customer));
-        when(pdfExporter.generateInvoicePdf(any(InvoiceResponse.class))).thenReturn(expectedPdf);
+        when(pdfExporter.generateInvoicePdf(any(InvoiceResponse.class), any(Tenant.class))).thenReturn(expectedPdf);
 
         byte[] result = service.generateInvoicePdf(command);
 
         ArgumentCaptor<InvoiceResponse> captor = ArgumentCaptor.forClass(InvoiceResponse.class);
-        verify(pdfExporter).generateInvoicePdf(captor.capture());
+        ArgumentCaptor<Tenant> tenantCaptor = ArgumentCaptor.forClass(Tenant.class);
+        verify(pdfExporter).generateInvoicePdf(captor.capture(), tenantCaptor.capture());
         InvoiceResponse invoiceResponse = captor.getValue();
 
         assertSame(expectedPdf, result);
+        assertSame(tenant, tenantCaptor.getValue());
+        assertEquals("INTERBANK - CTA. CTE. SOLES: 200-3002609027 / CCI: 003-200-003002609027-31",
+                tenantCaptor.getValue().getBankAccount());
         assertEquals("Acme S.A.", invoiceResponse.customerName());
         assertEquals("12345678", invoiceResponse.taxId());
         assertEquals("Junio", invoiceResponse.mesPeriodo());
-        assertEquals(Pais.PE, invoiceResponse.pais());
+        assertEquals(0, invoiceResponse.taxAmount().compareTo(new BigDecimal("1.9000")));
+        assertEquals(0, invoiceResponse.totalAmount().compareTo(new BigDecimal("11.9000")));
     }
 }

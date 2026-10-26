@@ -4,13 +4,8 @@ import com.mobile.billing.domain.model.Payment;
 
 public interface CreatePaymentUseCase {
 
-    Payment createPayment(PaymenComman comman);
+    Payment createPayment(CreatePaymentCommand command);
 
-    record PaymenComman(
-        String paymentMethod,
-        Integer termsDays
-    ){}
-
-
-
+    record CreatePaymentCommand(String paymentMethod, Integer termsDays) {
+    }
 }

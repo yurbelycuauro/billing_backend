@@ -54,6 +54,16 @@ public class CustomerJpaRepositoryAdapter implements CustomerRepositoryPort {
     }
 
     @Override
+    public Optional<Customer> findByTenantIdAndBusinessName(Long tenantId, String businessName) {
+        if (tenantId == null || businessName == null || businessName.isBlank()) {
+            return Optional.empty();
+        }
+
+        return repository.findByTenantIdAndBusinessName(tenantId, businessName)
+                .map(CustomerEntity::toDomain);
+    }
+
+    @Override
     public List<Customer> findAll() {
         return repository.findAll().stream()
                 .map(CustomerEntity::toDomain)

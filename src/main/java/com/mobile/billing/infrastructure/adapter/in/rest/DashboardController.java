@@ -11,15 +11,19 @@ import com.mobile.billing.domain.model.DashboardSummary;
 import com.mobile.billing.domain.ports.in.GetDashboardUseCase;
 import com.mobile.billing.infrastructure.adapter.in.rest.dto.DashboardResponse;
 
-import lombok.RequiredArgsConstructor;
-
 @RestController
 @RequestMapping("/api/v1/dashboard")
-@RequiredArgsConstructor
 public class DashboardController {
 
     private final GetDashboardUseCase getDashboardUseCase;
     private final DashboardMetricsMapper dashboardMetricsMapper;
+
+    public DashboardController(
+            GetDashboardUseCase getDashboardUseCase,
+            DashboardMetricsMapper dashboardMetricsMapper) {
+        this.getDashboardUseCase = getDashboardUseCase;
+        this.dashboardMetricsMapper = dashboardMetricsMapper;
+    }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DashboardResponse> getDashboard(

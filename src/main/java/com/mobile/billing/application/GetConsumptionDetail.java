@@ -11,14 +11,18 @@ import com.mobile.billing.domain.ports.in.GetConsumptionDetailUseCase;
 import com.mobile.billing.domain.ports.out.ConsumptionDetailRepositoryPort;
 import com.mobile.billing.domain.ports.out.CustomerRepositoryPort;
 
-import lombok.AllArgsConstructor;
-
 @Service
-@AllArgsConstructor
 public class GetConsumptionDetail implements GetConsumptionDetailUseCase {
     
     private final ConsumptionDetailRepositoryPort consumptionDetailRepositoryPort;
     private  final CustomerRepositoryPort customerRepositoryPort;
+
+    public GetConsumptionDetail(
+            ConsumptionDetailRepositoryPort consumptionDetailRepositoryPort,
+            CustomerRepositoryPort customerRepositoryPort) {
+        this.consumptionDetailRepositoryPort = consumptionDetailRepositoryPort;
+        this.customerRepositoryPort = customerRepositoryPort;
+    }
 
     @Override
     public Optional<ConsumptionDetail> getConsumptionDetailById(Long id) {

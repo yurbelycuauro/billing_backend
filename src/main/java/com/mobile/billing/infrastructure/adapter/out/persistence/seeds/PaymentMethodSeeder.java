@@ -8,13 +8,14 @@ import org.springframework.stereotype.Component;
 import com.mobile.billing.infrastructure.adapter.out.persistence.SpringDataPaymentRepository;
 import com.mobile.billing.infrastructure.adapter.out.persistence.entities.PaymentEntity;
 
-import lombok.AllArgsConstructor;
-
 @Component
-@AllArgsConstructor
 public class PaymentMethodSeeder implements CommandLineRunner {
 
     private final SpringDataPaymentRepository springDataPaymentRepository;
+
+    public PaymentMethodSeeder(SpringDataPaymentRepository springDataPaymentRepository) {
+        this.springDataPaymentRepository = springDataPaymentRepository;
+    }
 
     @Override
     public void run(String... args) throws Exception {

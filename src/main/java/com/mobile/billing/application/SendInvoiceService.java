@@ -5,13 +5,14 @@ import org.springframework.stereotype.Service;
 import com.mobile.billing.domain.ports.in.SendInvoiceUseCase;
 import com.mobile.billing.domain.ports.out.EmailSenderPort;
 
-import lombok.AllArgsConstructor;
-
 @Service
-@AllArgsConstructor
 public class SendInvoiceService implements SendInvoiceUseCase {
 
     private final EmailSenderPort emailSenderPort;
+
+    public SendInvoiceService(EmailSenderPort emailSenderPort) {
+        this.emailSenderPort = emailSenderPort;
+    }
 
     @Override
     public void execute(SendInvoiceCommand command) {

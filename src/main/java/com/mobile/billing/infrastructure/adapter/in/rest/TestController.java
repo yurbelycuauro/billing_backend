@@ -3,8 +3,6 @@ package com.mobile.billing.infrastructure.adapter.in.rest;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.AllArgsConstructor;
-
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -15,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/v1/test")
-@AllArgsConstructor
 public class TestController {
+
+    public TestController() {
+    }
 
     @GetMapping(value = "/rankindTest", produces = MediaType.APPLICATION_JSON_VALUE)
 public String getMethodName(@RequestParam String param) {

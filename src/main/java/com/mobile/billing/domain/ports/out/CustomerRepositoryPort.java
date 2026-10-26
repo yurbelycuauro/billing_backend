@@ -11,5 +11,6 @@ public interface CustomerRepositoryPort {
     Optional<String> findNameById(Long id);
     Optional<Customer> findByTaxId(String taxId);
     Optional<Customer> findByBusinessName(String businessName);
+    Optional<Customer> findByTenantIdAndBusinessName(Long tenantId, String businessName);
     List<Customer> findAll();
 }

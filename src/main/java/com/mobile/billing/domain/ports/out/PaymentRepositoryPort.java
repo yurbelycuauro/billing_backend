@@ -8,7 +8,12 @@ import com.mobile.billing.domain.model.Payment;
 public interface PaymentRepositoryPort {
 
     Payment save(Payment payment);
+
     Optional<Payment> getById(Long id);
+
     Optional<Payment> getByPaymentMethod(String paymentMethod);
+
     List<Payment> getAll();
+
+    List<Payment> getByTenantId(Long tenantId);
 }

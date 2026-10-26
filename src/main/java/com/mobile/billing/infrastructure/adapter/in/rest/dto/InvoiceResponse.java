@@ -8,8 +8,6 @@ import java.util.List;
 import com.mobile.billing.domain.model.Invoice;
 import com.mobile.billing.domain.model.InvoiceItem;
 import com.mobile.billing.domain.model.InvoiceStatus;
-import com.mobile.billing.domain.model.Moneda;
-import com.mobile.billing.domain.model.Pais;
 import com.mobile.billing.domain.model.Payment;
 import com.mobile.billing.infrastructure.adapter.out.consumption.MonthStringToIntConverter;
 
@@ -27,9 +25,13 @@ public record InvoiceResponse(
         BigDecimal totalAmount,
         String customerName,
         String taxId,
-        Moneda moneda,
-        Pais pais,
-        Payment payment) {
+        String moneda,
+        Payment payment,
+        String baseCurrency,
+        BigDecimal exchangeRate,
+        BigDecimal netSubtotalBase,
+        BigDecimal taxAmountBase,
+        BigDecimal totalAmountBase) {
     public static InvoiceResponse fromDomain(Invoice invoice) {
         return new InvoiceResponse(
                 invoice.getId(),
@@ -46,7 +48,11 @@ public record InvoiceResponse(
                 null,
                 null,
                 invoice.getMoneda(),
-                invoice.getPais(),
-                null);
+                null,
+                invoice.getBaseCurrency(),
+                invoice.getExchangeRate(),
+                invoice.getNetSubtotalBase(),
+                invoice.getTaxAmountBase(),
+                invoice.getTotalAmountBase());
     }
 }

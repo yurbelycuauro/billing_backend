@@ -21,17 +21,25 @@ import com.mobile.billing.infrastructure.adapter.in.rest.dto.CreateTenantRequest
 import com.mobile.billing.infrastructure.adapter.in.rest.dto.TenantResponse;
 import com.mobile.billing.infrastructure.adapter.in.rest.dto.UpdateTenantRequest;
 
-import lombok.RequiredArgsConstructor;
-
 @RestController
 @RequestMapping("/api/v1/tenants")
-@RequiredArgsConstructor
 public class TenantController {
 
     private final CreateTenantUseCase createTenantUseCase;
     private final GetTenantUseCase getTenantUseCase;
     private final UpdateTenantUseCase updateTenantUseCase;
     private final DeactivateTenantUseCase deactivateTenantUseCase;
+
+    public TenantController(
+            CreateTenantUseCase createTenantUseCase,
+            GetTenantUseCase getTenantUseCase,
+            UpdateTenantUseCase updateTenantUseCase,
+            DeactivateTenantUseCase deactivateTenantUseCase) {
+        this.createTenantUseCase = createTenantUseCase;
+        this.getTenantUseCase = getTenantUseCase;
+        this.updateTenantUseCase = updateTenantUseCase;
+        this.deactivateTenantUseCase = deactivateTenantUseCase;
+    }
 
     @PostMapping
     public ResponseEntity<Long> createTenant(@RequestBody CreateTenantRequest request) {
@@ -45,6 +53,14 @@ public class TenantController {
                 .map(TenantResponse::fromDomain)
                 .toList();
         return ResponseEntity.ok(tenants);
+    }
+
+    @GetMapping("/current")
+    public ResponseEntity<TenantResponse> getCurrentTenant() {
+        return getTenantUseCase.getCurrentTenant()
+                .map(TenantResponse::fromDomain)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{id}")

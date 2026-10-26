@@ -11,7 +11,7 @@ public class Tenant {
     private String countryCode;
     private String companyName;
     private String taxId; // RUT, RFC, NIT
-    private BigDecimal taxRate; // Porcentaje de impuesto (ej. 19.00)
+    private BigDecimal taxRate; // Fracción de impuesto (ej. 0.19 para 19%)
     private String currencyCode; // ISO 4217 ('CLP', 'MXN', 'USD')
     private String address; // Dirección fiscal del emisor
     private String phone; // Número de teléfono

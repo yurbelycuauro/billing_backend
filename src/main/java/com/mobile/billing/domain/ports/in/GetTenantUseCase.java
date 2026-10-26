@@ -8,6 +8,8 @@ import com.mobile.billing.domain.model.Tenant;
 
 public interface GetTenantUseCase {
     
+    Optional<Tenant> getCurrentTenant();
+
     Optional<Tenant> getTenantById(Long tenantId);
     List<Tenant> getAllTenants();
 

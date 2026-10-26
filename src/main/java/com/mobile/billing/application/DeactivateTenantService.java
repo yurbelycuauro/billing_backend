@@ -6,13 +6,14 @@ import com.mobile.billing.domain.model.Tenant;
 import com.mobile.billing.domain.ports.in.DeactivateTenantUseCase;
 import com.mobile.billing.domain.ports.out.TenantRepositoryPort;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class DeactivateTenantService implements DeactivateTenantUseCase {
 
     private final TenantRepositoryPort tenantRepository;
+
+    public DeactivateTenantService(TenantRepositoryPort tenantRepository) {
+        this.tenantRepository = tenantRepository;
+    }
 
     @Override
     public void execute(Long tenantId) {

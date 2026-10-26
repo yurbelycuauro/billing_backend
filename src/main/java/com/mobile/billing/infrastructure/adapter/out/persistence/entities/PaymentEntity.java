@@ -8,19 +8,18 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "payments")
 public class PaymentEntity extends BaseJpaEntity {
    
+    public PaymentEntity() {
+    }
+
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
@@ -30,6 +29,12 @@ public class PaymentEntity extends BaseJpaEntity {
 
     @Column(name = "terms_days", nullable = false)
     private Integer termsDays;
+
+    public PaymentEntity(Long id, String paymentMethod, Integer termsDays) {
+        this.id = id;
+        this.paymentMethod = paymentMethod;
+        this.termsDays = termsDays;
+    }
 
     public static PaymentEntity fromDomain(Payment payment) {
         if (payment == null) {

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import com.mobile.billing.domain.model.Tenant;
 import com.mobile.billing.domain.ports.in.InvoicePdfExporterUseCase;
 import com.mobile.billing.infrastructure.adapter.in.rest.dto.InvoiceResponse;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
@@ -20,10 +21,11 @@ public class generatePDFService implements InvoicePdfExporterUseCase {
     }
 
     @Override
-    public byte[] generateInvoicePdf(InvoiceResponse invoice) {
+    public byte[] generateInvoicePdf(InvoiceResponse invoice, Tenant tenant) {
         // 1. Cargar datos al contexto de Thymeleaf
         Context context = new Context();
         context.setVariable("invoice", invoice);
+        context.setVariable("tenant", tenant);
 
         // 2. Renderizar HTML dinámico
         String renderedHtml = templateEngine.process("pdf/invoice-template", context);

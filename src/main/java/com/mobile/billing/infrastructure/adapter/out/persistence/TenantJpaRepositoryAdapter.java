@@ -9,11 +9,13 @@ import com.mobile.billing.domain.model.Tenant;
 import com.mobile.billing.domain.ports.out.TenantRepositoryPort;
 import com.mobile.billing.infrastructure.adapter.out.persistence.entities.TenantEntity;
 
-import lombok.AllArgsConstructor;
 @Repository
-@AllArgsConstructor
 public class TenantJpaRepositoryAdapter implements TenantRepositoryPort {
     private final SpringDataTenantRepository springDataTenantRepository;
+
+    public TenantJpaRepositoryAdapter(SpringDataTenantRepository springDataTenantRepository) {
+        this.springDataTenantRepository = springDataTenantRepository;
+    }
    
     @Override
     public Tenant save(Tenant tenant) {

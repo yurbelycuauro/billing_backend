@@ -8,20 +8,20 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "customers", uniqueConstraints = {
-        @UniqueConstraint(name = "uk_customer_tenant_tax_id", columnNames = { "tenant_id", "tax_id" })
+        @UniqueConstraint(name = "uk_customer_tenant_tax_id", columnNames = { "tenant_id", "tax_id" }),
+        @UniqueConstraint(name = "uk_customer_tenant_business_name", columnNames = { "tenant_id", "business_name" })
 })
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class CustomerEntity extends BaseJpaEntity {
+
+    public CustomerEntity() {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +38,19 @@ public class CustomerEntity extends BaseJpaEntity {
 
     @Column(nullable = false)
     private boolean active = true;
+
+    public CustomerEntity(
+            Long id,
+            String taxId,
+            String businessName,
+            String notificationEmail,
+            boolean active) {
+        this.id = id;
+        this.taxId = taxId;
+        this.businessName = businessName;
+        this.notificationEmail = notificationEmail;
+        this.active = active;
+    }
 
     public static CustomerEntity fromDomain(Customer customer) {
         if (customer == null) {
