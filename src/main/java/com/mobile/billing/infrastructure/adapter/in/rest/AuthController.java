@@ -38,7 +38,7 @@ public class AuthController {
 
     @PostMapping("/refresh")
     public ResponseEntity<LoginResponse> refresh(@Valid @RequestBody RefreshTokenRequest request) {
-        log.info("Refresh request received ");
+        log.info("Refresh request received test");
         try {
             var result = refreshTokens.refresh(request.refreshToken());
             var response = LoginResponse.from(result);

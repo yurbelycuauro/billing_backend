@@ -49,19 +49,51 @@ jobs:
           docker build -t ${{ env.IMAGE_URL }}:${{ github.sha }} -t ${{ env.IMAGE_URL }}:latest .
           docker push ${{ env.IMAGE_URL }}:${{ github.sha }}
           docker push ${{ env.IMAGE_URL }}:latest
-      - name: Debug secret format
-        run: |
-          echo "Username length: ${#SPRING_DATASOURCE_USERNAME}"
-          echo "Username has trailing whitespace: $(echo "$SPRING_DATASOURCE_USERNAME" | grep -c '[[:space:]]$')"
-        env:
-          SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
-
       - name: Desplegar en Cloud Run
         run: |
+          python - <<'PY'
+          import json
+          import os
+
+          environment = {
+              "DB_PROFILE": "postgresql",
+              "SPRING_DATASOURCE_URL": os.environ["SPRING_DATASOURCE_URL"],
+              "SPRING_DATASOURCE_USERNAME": os.environ["SPRING_DATASOURCE_USERNAME"],
+              "SPRING_DATASOURCE_PASSWORD": os.environ["SPRING_DATASOURCE_PASSWORD"],
+              "SENDGRID_API_KEY": os.environ["SENDGRID_API_KEY"],
+              "MAIL_FROM_ADDRESS": os.environ["MAIL_FROM_ADDRESS"],
+              "JWT_SECRET": os.environ["JWT_SECRET"],
+              "INITIAL_ADMIN_USERNAME": os.environ["INITIAL_ADMIN_USERNAME"],
+              "INITIAL_ADMIN_PASSWORD": os.environ["INITIAL_ADMIN_PASSWORD"],
+              "BANCO_CENTRAL_TOKEN": os.environ["BANCO_CENTRAL_TOKEN"],
+          }
+          missing = [key for key, value in environment.items() if not value.strip()]
+          if missing:
+              raise SystemExit("Missing required deployment values: " + ", ".join(missing))
+
+          print("Database profile: postgresql")
+          print("Supabase JDBC URL: configured (value hidden)")
+          print("Supabase username/password: configured (values hidden)")
+          print("JWT, SendGrid, admin, and Banco Central secrets: configured (values hidden)")
+
+          with open(os.path.join(os.environ["RUNNER_TEMP"], "cloud-run-env.json"), "w") as env_file:
+              json.dump(environment, env_file)
+          PY
           gcloud run deploy ${{ env.SERVICE_NAME }} \
             --image ${{ env.IMAGE_URL }}:${{ github.sha }} \
             --region ${{ env.REGION }} \
             --platform managed \
             --allow-unauthenticated \
             --min-instances=0 \
-            --set-env-vars SPRING_DATASOURCE_URL="${{ secrets.SUPABASE_URL }}",SPRING_DATASOURCE_USERNAME="${{ secrets.SPRING_DATASOURCE_USERNAME }}",SPRING_DATASOURCE_PASSWORD="${{ secrets.SUPABASE_PASS }}",SENDGRID_API_KEY="${{ secrets.SENDGRID_API_KEY }}",MAIL_FROM_ADDRESS="${{ secrets.MAIL_FROM_ADDRESS }}"
+            --env-vars-file "$RUNNER_TEMP/cloud-run-env.json"
+          echo "Cloud Run deployment succeeded; the new revision passed its readiness checks."
+        env:
+          SPRING_DATASOURCE_URL: ${{ secrets.SUPABASE_URL }}
+          SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.SUPABASE_PASS }}
+          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+          MAIL_FROM_ADDRESS: ${{ secrets.MAIL_FROM_ADDRESS }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          INITIAL_ADMIN_USERNAME: ${{ secrets.INITIAL_ADMIN_USERNAME }}
+          INITIAL_ADMIN_PASSWORD: ${{ secrets.INITIAL_ADMIN_PASSWORD }}
+          BANCO_CENTRAL_TOKEN: ${{ secrets.BANCO_CENTRAL_TOKEN }}
