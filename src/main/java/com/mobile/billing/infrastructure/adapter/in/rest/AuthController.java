@@ -29,6 +29,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+        log.info("Login request received: username={}", request.username());
         try {
             return ResponseEntity.ok(LoginResponse.from(authenticateUser.execute(request.toCommand())));
         } catch (BadCredentialsException | IllegalArgumentException exception) {
