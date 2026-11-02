@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mobile.billing.domain.model.Customer;
 import com.mobile.billing.domain.model.Invoice;
 import com.mobile.billing.domain.model.InvoiceItem;
 import com.mobile.billing.domain.model.InvoiceStatus;
@@ -32,7 +33,7 @@ public record InvoiceResponse(
         BigDecimal netSubtotalBase,
         BigDecimal taxAmountBase,
         BigDecimal totalAmountBase) {
-    public static InvoiceResponse fromDomain(Invoice invoice) {
+    public static InvoiceResponse fromDomain(Invoice invoice, Customer customer) {
         return new InvoiceResponse(
                 invoice.getId(),
                 invoice.getCustomerId(),
@@ -45,8 +46,8 @@ public record InvoiceResponse(
                 invoice.getNetSubtotal(),
                 invoice.getTaxAmount(),
                 invoice.getTotalAmount(),
-                null,
-                null,
+                customer.getBusinessName(),
+                customer.getTaxId(),
                 invoice.getMoneda(),
                 null,
                 invoice.getBaseCurrency(),

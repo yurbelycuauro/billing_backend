@@ -10,9 +10,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.mobile.billing.domain.model.Invoice;
 import com.mobile.billing.domain.ports.in.CreateInvoiceUseCase;
 import com.mobile.billing.domain.ports.in.GenerateInvoicePdfUseCase;
 import com.mobile.billing.domain.ports.in.GenerateInvoicePdfUseCase.GenerateInvoicePdfCommand;
+import com.mobile.billing.domain.ports.in.GetCustomerUseCase;
 import com.mobile.billing.domain.ports.in.GetInvoiceUseCase;
 import com.mobile.billing.infrastructure.adapter.in.rest.dto.GenerateInvoicePdfRequest;
 import com.mobile.billing.infrastructure.adapter.in.rest.dto.InvoiceRequest;
@@ -27,20 +29,23 @@ public class InvoiceController {
         private final GenerateInvoicePdfUseCase generateInvoicePdfUseCase;
         private final CreateInvoiceUseCase createInvoiceUseCase;
         private final GetInvoiceUseCase getInvoiceUseCase;
+        private final GetCustomerUseCase getCustomerUseCase;
 
         public InvoiceController(
                         GenerateInvoicePdfUseCase generateInvoicePdfUseCase,
                         CreateInvoiceUseCase createInvoiceUseCase,
-                        GetInvoiceUseCase getInvoiceUseCase) {
+                        GetInvoiceUseCase getInvoiceUseCase,
+                        GetCustomerUseCase getCustomerUseCase) {
                 this.generateInvoicePdfUseCase = generateInvoicePdfUseCase;
                 this.createInvoiceUseCase = createInvoiceUseCase;
                 this.getInvoiceUseCase = getInvoiceUseCase;
+                this.getCustomerUseCase = getCustomerUseCase;
         }
 
         @GetMapping(value = "/{invoiceId}", produces = MediaType.APPLICATION_JSON_VALUE)
         public ResponseEntity<InvoiceResponse> getInvoiceById(@PathVariable Long invoiceId) {
                 var invoice = getInvoiceUseCase.getInvoiceById(invoiceId);
-                return ResponseEntity.ok(InvoiceResponse.fromDomain(invoice));
+                return ResponseEntity.ok(toResponse(invoice));
         }
 
         @GetMapping(value = "/period", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -51,7 +56,7 @@ public class InvoiceController {
 
                 Page<InvoiceResponse> response = getInvoiceUseCase
                                 .findByPeriodYearAndPeriodMonth(year, month, pageable)
-                                .map(InvoiceResponse::fromDomain);
+                                .map(this::toResponse);
 
                 return ResponseEntity.ok(response);
         }
@@ -65,7 +70,7 @@ public class InvoiceController {
 
                 Page<InvoiceResponse> response = getInvoiceUseCase
                                 .findByPeriodYearAndPeriodMonthAndCustomerId(year, month, customerId, pageable)
-                                .map(InvoiceResponse::fromDomain);
+                                .map(this::toResponse);
 
                 return ResponseEntity.ok(response);
         }
@@ -77,7 +82,7 @@ public class InvoiceController {
 
                 Page<InvoiceResponse> response = getInvoiceUseCase
                                 .findAll(year, pageable)
-                                .map(InvoiceResponse::fromDomain);
+                                .map(this::toResponse);
 
                 return ResponseEntity.ok(response);
         }
@@ -108,6 +113,13 @@ public class InvoiceController {
                 var invoiceCreated = createInvoiceUseCase.generateInvoice(command);
 
                 return ResponseEntity.status(HttpStatus.CREATED)
-                                .body(InvoiceResponse.fromDomain(invoiceCreated));
+                                .body(toResponse(invoiceCreated));
+        }
+
+        private InvoiceResponse toResponse(Invoice invoice) {
+                var customer = getCustomerUseCase.getCustomerById(invoice.getCustomerId())
+                                .orElseThrow(() -> new IllegalStateException(
+                                                "Customer not found with id: " + invoice.getCustomerId()));
+                return InvoiceResponse.fromDomain(invoice, customer);
         }
 }
