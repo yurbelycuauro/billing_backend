@@ -1,23 +1,19 @@
 package com.mobile.billing.domain.ports.in;
 
+import java.util.concurrent.CompletableFuture;
+
 import com.mobile.billing.domain.model.DataSource;
 
 public interface ProcessConsumptionUseCase {
 
-    // deberia recibir el archivo?
-
-    void processConsumption(
-        ProcessConsumptionCommand command // Se recibe como DataSource enum
-
-    );
+    CompletableFuture<Void> processConsumption(ProcessConsumptionCommand command);
 
     record ProcessConsumptionCommand(
         DataSource dataSource,
         Integer anioPeriodo,
         Integer mesPeriodo,
-        byte[] excelBytes // Opcional: nulo si el DataSource es DIRECTO_BD
+        byte[] excelBytes
     ) {
-        // Validación defensiva en el constructor del DTO
         public ProcessConsumptionCommand {
             if (dataSource == DataSource.MANUAL_EXCEL && (excelBytes == null || excelBytes.length == 0)) {
                 throw new IllegalArgumentException("Para origen MANUAL_EXCEL se requiere el archivo de datos.");

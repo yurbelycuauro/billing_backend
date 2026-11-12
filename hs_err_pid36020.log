@@ -1,0 +1,237 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (mmap) failed to map 123731968 bytes for G1 virtual space
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   The process is running with CompressedOops enabled, and the Java Heap may be blocking the growth of the native heap
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+#   JVM is running with Unscaled Compressed Oops mode in which the Java heap is
+#     placed in the first 4GB address space. The Java Heap base address is the
+#     maximum limit for the native heap growth. Please use -XX:HeapBaseMinAddress
+#     to set the Java Heap base and to place the Java Heap above 4GB virtual address.
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (os_windows.cpp:3604), pid=36020, tid=12428
+#
+# JRE version:  (21.0.11+9) (build )
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (21.0.11+9-LTS-211, mixed mode, sharing, tiered, compressed oops, compressed class ptrs, g1 gc, windows-amd64)
+# No core dump will be written. Minidumps are not enabled by default on client versions of Windows
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=64421 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=billing -XX:+ShowCodeDetailsInExceptionMessages com.mobile.billing.BillingApplication
+
+Host: AMD Ryzen 5 4500U with Radeon Graphics         , 6 cores, 7G,  Windows 11 , 64 bit Build 26100 (10.0.26100.9711)
+Time: Wed Nov 11 16:34:03 2026 Hora verano Sudamérica Pacífico elapsed time: 0.100688 seconds (0d 0h 0m 0s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x000001b6b4dc1480):  JavaThread "Unknown thread" [_thread_in_vm, id=12428, stack(0x0000000308200000,0x0000000308300000) (1024K)]
+
+Stack: [0x0000000308200000,0x0000000308300000]
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [jvm.dll+0x6d0ef9]
+V  [jvm.dll+0x860126]
+V  [jvm.dll+0x86261e]
+V  [jvm.dll+0x862cf3]
+V  [jvm.dll+0x282bc6]
+V  [jvm.dll+0x6cd7a5]
+V  [jvm.dll+0x6c232a]
+V  [jvm.dll+0x35bfb8]
+V  [jvm.dll+0x363c76]
+V  [jvm.dll+0x3b4d8e]
+V  [jvm.dll+0x3b5038]
+V  [jvm.dll+0x32fa6c]
+V  [jvm.dll+0x3305c1]
+V  [jvm.dll+0x82a10e]
+V  [jvm.dll+0x3c1d21]
+V  [jvm.dll+0x812fda]
+V  [jvm.dll+0x454701]
+V  [jvm.dll+0x456151]
+C  [jli.dll+0x5310]
+C  [ucrtbase.dll+0x2cd30]
+C  [KERNEL32.DLL+0x2dda7]
+C  [ntdll.dll+0x7ee4c]
+
+
+---------------  P R O C E S S  ---------------
+
+Threads class SMR info:
+_java_thread_list=0x00007ff90a369c88, length=0, elements={
+}
+
+Java Threads: ( => current thread )
+Total: 0
+
+Other Threads:
+  0x000001b6b76246c0 WorkerThread "GC Thread#0"                     [id=30768, stack(0x0000000308300000,0x0000000308400000) (1024K)]
+  0x000001b6b76340d0 ConcurrentGCThread "G1 Main Marker"            [id=12552, stack(0x0000000308400000,0x0000000308500000) (1024K)]
+  0x000001b6b7634a80 WorkerThread "G1 Conc#0"                       [id=37412, stack(0x0000000308500000,0x0000000308600000) (1024K)]
+
+[error occurred during error reporting (printing all threads), id 0xc0000005, EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x00007ff909ad26f7]
+VM state: not at safepoint (not fully initialized)
+
+VM Mutex/Monitor currently owned by a thread:  ([mutex/lock_event])
+[0x00007ff90a3db050] Heap_lock - owner thread: 0x000001b6b4dc1480
+
+Heap address: 0x000000008a400000, size: 1884 MB, Compressed Oops mode: 32-bit
+
+CDS archive(s) mapped at: [0x0000000000000000-0x0000000000000000-0x0000000000000000), size 0, SharedBaseAddress: 0x0000000800000000, ArchiveRelocationMode: 1.
+Narrow klass base: 0x0000000000000000, Narrow klass shift: 0, Narrow klass range: 0x0
+
+GC Precious Log:
+ CardTable entry size: 512
+ Card Set container configuration: InlinePtr #cards 5 size 8 Array Of Cards #cards 12 size 40 Howl #buckets 4 coarsen threshold 1843 Howl Bitmap #cards 512 size 80 coarsen threshold 460 Card regions per heap region 1 cards per card region 2048
+
+Heap:
+ garbage-first heap   total 0K, used 0K [0x000000008a400000, 0x0000000100000000)
+  region size 1024K, 0 young (0K), 0 survivors (0K)
+
+[error occurred during error reporting (printing heap information), id 0xc0000005, EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x00007ff909ebafd9]
+GC Heap History (0 events):
+No events
+
+Dll operation events (1 events):
+Event: 0.036 Loaded shared library C:\Program Files\Java\jdk-21.0.11\bin\java.dll
+
+Deoptimization events (0 events):
+No events
+
+Classes loaded (0 events):
+No events
+
+Classes unloaded (0 events):
+No events
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+ZGC Phase Switch (0 events):
+No events
+
+VM Operations (0 events):
+No events
+
+Events (0 events):
+No events
+
+
+Dynamic libraries:
+0x00007ff7f59d0000 - 0x00007ff7f59e0000 	C:\Program Files\Java\jdk-21.0.11\bin\java.exe
+0x00007ff9cbe00000 - 0x00007ff9cc068000 	C:\WINDOWS\SYSTEM32\ntdll.dll
+0x00007ff9cb310000 - 0x00007ff9cb3db000 	C:\WINDOWS\System32\KERNEL32.DLL
+0x00007ff9c8ff0000 - 0x00007ff9c93f1000 	C:\WINDOWS\System32\KERNELBASE.dll
+0x00007ff9c89d0000 - 0x00007ff9c8ce1000 	C:\WINDOWS\System32\SophosED\SophosED.dll
+0x00007ff9c9810000 - 0x00007ff9c995c000 	C:\WINDOWS\System32\ucrtbase.dll
+0x00007ff9b1a90000 - 0x00007ff9b1aa9000 	C:\Program Files\Java\jdk-21.0.11\bin\jli.dll
+0x00007ff9cb100000 - 0x00007ff9cb1bc000 	C:\WINDOWS\System32\ADVAPI32.dll
+0x00007ff9cab50000 - 0x00007ff9cabf9000 	C:\WINDOWS\System32\msvcrt.dll
+0x00007ff9cbd10000 - 0x00007ff9cbdb8000 	C:\WINDOWS\System32\sechost.dll
+0x00007ff9cad00000 - 0x00007ff9cae18000 	C:\WINDOWS\System32\RPCRT4.dll
+0x00007ff9c9c10000 - 0x00007ff9c9de7000 	C:\WINDOWS\System32\USER32.dll
+0x00007ff9c9a20000 - 0x00007ff9c9a47000 	C:\WINDOWS\System32\win32u.dll
+0x00007ff9cb1d0000 - 0x00007ff9cb1fb000 	C:\WINDOWS\System32\GDI32.dll
+0x00007ff9c9620000 - 0x00007ff9c974a000 	C:\WINDOWS\System32\gdi32full.dll
+0x00007ff9c9970000 - 0x00007ff9c9a13000 	C:\WINDOWS\System32\msvcp_win.dll
+0x00007ff9c18a0000 - 0x00007ff9c18ab000 	C:\WINDOWS\SYSTEM32\VERSION.dll
+0x00007ff9b19f0000 - 0x00007ff9b1a0e000 	C:\Program Files\Java\jdk-21.0.11\bin\VCRUNTIME140.dll
+0x00007ff9b5790000 - 0x00007ff9b5a21000 	C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.26100.9711_none_3e07b8b0e334e825\COMCTL32.dll
+0x00007ff9cacc0000 - 0x00007ff9cacf1000 	C:\WINDOWS\System32\IMM32.DLL
+0x00007ff9b2d80000 - 0x00007ff9b2d8c000 	C:\Program Files\Java\jdk-21.0.11\bin\vcruntime140_1.dll
+0x00007ff9b0e80000 - 0x00007ff9b0f0d000 	C:\Program Files\Java\jdk-21.0.11\bin\msvcp140.dll
+0x00007ff909790000 - 0x00007ff90a4b8000 	C:\Program Files\Java\jdk-21.0.11\bin\server\jvm.dll
+0x00007ff9cbaa0000 - 0x00007ff9cbb21000 	C:\WINDOWS\System32\WS2_32.dll
+0x00007ff9c8960000 - 0x00007ff9c89be000 	C:\WINDOWS\SYSTEM32\POWRPROF.dll
+0x00007ff9c1860000 - 0x00007ff9c1897000 	C:\WINDOWS\SYSTEM32\WINMM.dll
+0x00007ff9c8940000 - 0x00007ff9c8955000 	C:\WINDOWS\SYSTEM32\UMPDC.dll
+0x00007ff9c7930000 - 0x00007ff9c794b000 	C:\WINDOWS\SYSTEM32\kernel.appcore.dll
+0x00007ff9b2d20000 - 0x00007ff9b2d2a000 	C:\Program Files\Java\jdk-21.0.11\bin\jimage.dll
+0x00007ff9c61f0000 - 0x00007ff9c643c000 	C:\WINDOWS\SYSTEM32\DBGHELP.DLL
+0x00007ff9cb470000 - 0x00007ff9cb7fb000 	C:\WINDOWS\System32\combase.dll
+0x00007ff9cb200000 - 0x00007ff9cb2d9000 	C:\WINDOWS\System32\OLEAUT32.dll
+0x00007ff9ad2e0000 - 0x00007ff9ad31b000 	C:\WINDOWS\SYSTEM32\dbgcore.DLL
+0x00007ff9c9750000 - 0x00007ff9c97fc000 	C:\WINDOWS\System32\bcryptPrimitives.dll
+0x00007ff9b19c0000 - 0x00007ff9b19e1000 	C:\Program Files\Java\jdk-21.0.11\bin\java.dll
+
+dbghelp: loaded successfully - version: 4.0.5 - missing functions: none
+symbol engine: initialized successfully - sym options: 0x614 - pdb path: .;C:\Program Files\Java\jdk-21.0.11\bin;C:\WINDOWS\SYSTEM32;C:\WINDOWS\System32\SophosED;C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.26100.9711_none_3e07b8b0e334e825;C:\Program Files\Java\jdk-21.0.11\bin\server
+
+VM Arguments:
+jvm_args: -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=64421 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=billing -XX:+ShowCodeDetailsInExceptionMessages 
+java_command: com.mobile.billing.BillingApplication
+java_class_path (initial): C:\Users\ycuauro\Documents\spring-boot-proyects\billing\billing\target\classes;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-starter-data-jpa\4.1.2\spring-boot-starter-data-jpa-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-starter\4.1.2\spring-boot-starter-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-starter-logging\4.1.2\spring-boot-starter-logging-4.1.2.jar;C:\Users\ycuauro\.m2\repository\ch\qos\logback\logback-classic\1.5.38\logback-classic-1.5.38.jar;C:\Users\ycuauro\.m2\repository\ch\qos\logback\logback-core\1.5.38\logback-core-1.5.38.jar;C:\Users\ycuauro\.m2\repository\org\apache\logging\log4j\log4j-to-slf4j\2.25.5\log4j-to-slf4j-2.25.5.jar;C:\Users\ycuauro\.m2\repository\org\apache\logging\log4j\log4j-api\2.25.5\log4j-api-2.25.5.jar;C:\Users\ycuauro\.m2\repository\org\slf4j\jul-to-slf4j\2.0.20\jul-to-slf4j-2.0.20.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-autoconfigure\4.1.2\spring-boot-autoconfigure-4.1.2.jar;C:\Users\ycuauro\.m2\repository\jakarta\annotation\jakarta.annotation-api\3.0.0\jakarta.annotation-api-3.0.0.jar;C:\Users\ycuauro\.m2\repository\org\yaml\snakeyaml\2.6\snakeyaml-2.6.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-starter-jdbc\4.1.2\spring-boot-starter-jdbc-4.1.2.jar;C:\Users\ycuauro\.m2\repository\com\zaxxer\HikariCP\7.0.2\HikariCP-7.0.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-data-jpa\4.1.2\spring-boot-data-jpa-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-data-commons\4.1.2\spring-boot-data-commons-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-persistence\4.1.2\spring-boot-persistence-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\data\spring-data-commons\4.1.2\spring-data-commons-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-hibernate\4.1.2\spring-boot-hibernate-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-jpa\4.1.2\spring-boot-jpa-4.1.2.jar;C:\Users\ycuauro\.m2\repository\jakarta\persistence\jakarta.persistence-api\3.2.0\jakarta.persistence-api-3.2.0.jar;C:\Users\ycuauro\.m2\repository\org\hibernate\orm\hibernate-core\7.4.13.Final\hibernate-core-7.4.13.Final.jar;C:\Users\ycuauro\.m2\repository\jakarta\transaction\jakarta.transaction-api\2.0.1\jakarta.transaction-api-2.0.1.jar;C:\Users\ycuauro\.m2\repository\org\hibernate\models\hibernate-models\1.1.2\hibernate-models-1.1.2.jar;C:\Users\ycuauro\.m2\repository\jakarta\inject\jakarta.inject-api\2.0.1\jakarta.inject-api-2.0.1.jar;C:\Users\ycuauro\.m2\repository\org\springframework\spring-orm\7.0.10\spring-orm-7.0.10.jar;C:\Users\ycuauro\.m2\repository\org\springframework\data\spring-data-jpa\4.1.2\spring-data-jpa-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\spring-tx\7.0.10\spring-tx-7.0.10.jar;C:\Users\ycuauro\.m2\repository\org\antlr\antlr4-runtime\4.13.2\antlr4-runtime-4.13.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\spring-aspects\7.0.10\spring-aspects-7.0.10.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-jdbc\4.1.2\spring-boot-jdbc-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot\4.1.2\spring-boot-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-sql\4.1.2\spring-boot-sql-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-transaction\4.1.2\spring-boot-transaction-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\spring-jdbc\7.0.10\spring-jdbc-7.0.10.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-starter-webmvc\4.1.2\spring-boot-starter-webmvc-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-starter-jackson\4.1.2\spring-boot-starter-jackson-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-jackson\4.1.2\spring-boot-jackson-4.1.2.jar;C:\Users\ycuauro\.m2\repository\tools\jackson\core\jackson-databind\3.1.7\jackson-databind-3.1.7.jar;C:\Users\ycuauro\.m2\repository\tools\jackson\core\jackson-core\3.1.7\jackson-core-3.1.7.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-starter-tomcat\4.1.2\spring-boot-starter-tomcat-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-starter-tomcat-runtime\4.1.2\spring-boot-starter-tomcat-runtime-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\apache\tomcat\embed\tomcat-embed-core\11.0.27\tomcat-embed-core-11.0.27.jar;C:\Users\ycuauro\.m2\repository\org\apache\tomcat\embed\tomcat-embed-websocket\11.0.27\tomcat-embed-websocket-11.0.27.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-tomcat\4.1.2\spring-boot-tomcat-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-http-converter\4.1.2\spring-boot-http-converter-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\spring-web\7.0.10\spring-web-7.0.10.jar;C:\Users\ycuauro\.m2\repository\io\micrometer\micrometer-observation\1.17.2\micrometer-observation-1.17.2.jar;C:\Users\ycuauro\.m2\repository\io\micrometer\micrometer-commons\1.17.2\micrometer-commons-1.17.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-webmvc\4.1.2\spring-boot-webmvc-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-servlet\4.1.2\spring-boot-servlet-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\spring-webmvc\7.0.10\spring-webmvc-7.0.10.jar;C:\Users\ycuauro\.m2\repository\org\springframework\spring-expression\7.0.10\spring-expression-7.0.10.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-starter-validation\4.1.2\spring-boot-starter-validation-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-validation\4.1.2\spring-boot-validation-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\apache\tomcat\embed\tomcat-embed-el\11.0.27\tomcat-embed-el-11.0.27.jar;C:\Users\ycuauro\.m2\repository\org\hibernate\validator\hibernate-validator\9.1.5.Final\hibernate-validator-9.1.5.Final.jar;C:\Users\ycuauro\.m2\repository\jakarta\validation\jakarta.validation-api\3.1.1\jakarta.validation-api-3.1.1.jar;C:\Users\ycuauro\.m2\repository\org\jboss\logging\jboss-logging\3.6.3.Final\jboss-logging-3.6.3.Final.jar;C:\Users\ycuauro\.m2\repository\com\fasterxml\classmate\1.7.3\classmate-1.7.3.jar;C:\Users\ycuauro\.m2\repository\com\google\cloud\spring-cloud-gcp-starter-pubsub\8.3.1\spring-cloud-gcp-starter-pubsub-8.3.1.jar;C:\Users\ycuauro\.m2\repository\com\google\cloud\spring-cloud-gcp-starter\8.3.1\spring-cloud-gcp-starter-8.3.1.jar;C:\Users\ycuauro\.m2\repository\com\google\cloud\spring-cloud-gcp-core\8.3.1\spring-cloud-gcp-core-8.3.1.jar;C:\Users\ycuauro\.m2\repository\com\google\cloud\google-cloud-core\2.78.0\google-cloud-core-2.78.0.jar;C:\Users\ycuauro\.m2\repository\com\google\cloud\spring-cloud-gcp-autoconfigure\8.3.1\spring-cloud-gcp-autoconfigure-8.3.1.jar;C:\Users\ycuauro\.m2\repository\org\apache\commons\commons-lang3\3.20.0\commons-lang3-3.20.0.jar;C:\Users\ycuauro\.m2\repository\com\google\cloud\spring-cloud-gcp-pubsub\8.3.1\spring-cloud-gcp-pubsub-8.3.1.jar;C:\Users\ycuauro\.m2\repository\com\google\cloud\google-cloud-pubsub\1.158.0\google-cloud-pubsub-1.158.0.jar;C:\Users\ycuauro\.m2\repository\io\grpc\grpc-api\1.83.0\grpc-api-1.83.0.jar;C:\Users\ycuauro\.m2\repository\io\grpc\grpc-stub\1.83.0\grpc-stub-1.83.0.jar;C:\Users\ycuauro\.m2\repository\org\codehaus\mojo\animal-sniffer-annotations\1.27\animal-sniffer-annotations-1.27.jar;C:\Users\ycuauro\.m2\repository\io\grpc\grpc-protobuf\1.83.0\grpc-protobuf-1.83.0.jar;C:\Users\ycuauro\.m2\repository\io\grpc\grpc-protobuf-lite\1.83.0\grpc-protobuf-lite-1.83.0.jar;C:\Users\ycuauro\.m2\repository\com\google\api\api-common\2.71.0\api-common-2.71.0.jar;C:\Users\ycuauro\.m2\repository\com\google\protobuf\protobuf-java\4.33.6\protobuf-java-4.33.6.jar;C:\Users\ycuauro\.m2\repository\com\google\protobuf\protobuf-java-util\4.33.6\protobuf-java-util-4.33.6.jar;C:\Users\ycuauro\.m2\repository\com\google\code\gson\gson\2.13.2\gson-2.13.2.jar;C:\Users\ycuauro\.m2\repository\com\google\api\grpc\proto-google-common-protos\2.79.0\proto-google-common-protos-2.79.0.jar;C:\Users\ycuauro\.m2\repository\com\google\auth\google-auth-library-oauth2-http\1.55.0\google-auth-library-oauth2-http-1.55.0.jar;C:\Users\ycuauro\.m2\repository\com\google\auth\google-auth-library-credentials\1.55.0\google-auth-library-credentials-1.55.0.jar;C:\Users\ycuauro\.m2\repository\com\google\http-client\google-http-client-gson\2.2.0\google-http-client-gson-2.2.0.jar;C:\Users\ycuauro\.m2\repository\com\google\api\grpc\proto-google-cloud-pubsub-v1\1.158.0\proto-google-cloud-pubsub-v1-1.158.0.jar;C:\Users\ycuauro\.m2\repository\com\google\api\grpc\proto-google-iam-v1\1.74.0\proto-google-iam-v1-1.74.0.jar;C:\Users\ycuauro\.m2\repository\com\google\guava\guava\33.6.0-jre\guava-33.6.0-jre.jar;C:\Users\ycuauro\.m2\repository\com\google\guava\failureaccess\1.0.3\failureaccess-1.0.3.jar;C:\Users\ycuauro\.m2\repository\com\google\guava\listenablefuture\9999.0-empty-to-avoid-conflict-with-guava\listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar;C:\Users\ycuauro\.m2\repository\com\google\j2objc\j2objc-annotations\3.1\j2objc-annotations-3.1.jar;C:\Users\ycuauro\.m2\repository\com\google\api\gax\2.88.0\gax-2.88.0.jar;C:\Users\ycuauro\.m2\repository\com\google\api\gax-grpc\2.88.0\gax-grpc-2.88.0.jar;C:\Users\ycuauro\.m2\repository\io\grpc\grpc-inprocess\1.83.0\grpc-inprocess-1.83.0.jar;C:\Users\ycuauro\.m2\repository\io\grpc\grpc-core\1.83.0\grpc-core-1.83.0.jar;C:\Users\ycuauro\.m2\repository\com\google\android\annotations\4.1.1.4\annotations-4.1.1.4.jar;C:\Users\ycuauro\.m2\repository\io\grpc\grpc-alts\1.83.0\grpc-alts-1.83.0.jar;C:\Users\ycuauro\.m2\repository\io\grpc\grpc-auth\1.83.0\grpc-auth-1.83.0.jar;C:\Users\ycuauro\.m2\repository\io\grpc\grpc-netty-shaded\1.83.0\grpc-netty-shaded-1.83.0.jar;C:\Users\ycuauro\.m2\repository\io\grpc\grpc-util\1.83.0\grpc-util-1.83.0.jar;C:\Users\ycuauro\.m2\repository\io\perfmark\perfmark-api\0.27.0\perfmark-api-0.27.0.jar;C:\Users\ycuauro\.m2\repository\io\grpc\grpc-googleapis\1.83.0\grpc-googleapis-1.83.0.jar;C:\Users\ycuauro\.m2\repository\io\grpc\grpc-xds\1.83.0\grpc-xds-1.83.0.jar;C:\Users\ycuauro\.m2\repository\io\grpc\grpc-services\1.83.0\grpc-services-1.83.0.jar;C:\Users\ycuauro\.m2\repository\com\google\re2j\re2j\1.8\re2j-1.8.jar;C:\Users\ycuauro\.m2\repository\dev\cel\runtime\0.13.0\runtime-0.13.0.jar;C:\Users\ycuauro\.m2\repository\dev\cel\common\0.13.0\common-0.13.0.jar;C:\Users\ycuauro\.m2\repository\org\threeten\threeten-extra\1.8.0\threeten-extra-1.8.0.jar;C:\Users\ycuauro\.m2\repository\dev\cel\protobuf\0.13.0\protobuf-0.13.0.jar;C:\Users\ycuauro\.m2\repository\com\google\api\gax-httpjson\2.88.0\gax-httpjson-2.88.0.jar;C:\Users\ycuauro\.m2\repository\org\conscrypt\conscrypt-openjdk-uber\2.6.2\conscrypt-openjdk-uber-2.6.2.jar;C:\Users\ycuauro\.m2\repository\org\threeten\threetenbp\1.7.0\threetenbp-1.7.0.jar;C:\Users\ycuauro\.m2\repository\com\google\code\findbugs\jsr305\3.0.2\jsr305-3.0.2.jar;C:\Users\ycuauro\.m2\repository\io\opencensus\opencensus-api\0.31.1\opencensus-api-0.31.1.jar;C:\Users\ycuauro\.m2\repository\io\grpc\grpc-context\1.83.0\grpc-context-1.83.0.jar;C:\Users\ycuauro\.m2\repository\com\google\errorprone\error_prone_annotations\2.50.0\error_prone_annotations-2.50.0.jar;C:\Users\ycuauro\.m2\repository\com\google\auto\value\auto-value-annotations\1.11.0\auto-value-annotations-1.11.0.jar;C:\Users\ycuauro\.m2\repository\com\google\http-client\google-http-client\2.2.0\google-http-client-2.2.0.jar;C:\Users\ycuauro\.m2\repository\commons-codec\commons-codec\1.21.0\commons-codec-1.21.0.jar;C:\Users\ycuauro\.m2\repository\io\opencensus\opencensus-contrib-http-util\0.31.1\opencensus-contrib-http-util-0.31.1.jar;C:\Users\ycuauro\.m2\repository\io\opentelemetry\opentelemetry-api\1.62.0\opentelemetry-api-1.62.0.jar;C:\Users\ycuauro\.m2\repository\io\opentelemetry\opentelemetry-context\1.62.0\opentelemetry-context-1.62.0.jar;C:\Users\ycuauro\.m2\repository\io\opentelemetry\opentelemetry-common\1.62.0\opentelemetry-common-1.62.0.jar;C:\Users\ycuauro\.m2\repository\javax\annotation\javax.annotation-api\1.3.2\javax.annotation-api-1.3.2.jar;C:\Users\ycuauro\.m2\repository\org\slf4j\slf4j-api\2.0.20\slf4j-api-2.0.20.jar;C:\Users\ycuauro\.m2\repository\com\google\cloud\spring-cloud-gcp-starter-storage\8.3.1\spring-cloud-gcp-starter-storage-8.3.1.jar;C:\Users\ycuauro\.m2\repository\com\google\cloud\spring-cloud-gcp-storage\8.3.1\spring-cloud-gcp-storage-8.3.1.jar;C:\Users\ycuauro\.m2\repository\org\springframework\spring-context\7.0.10\spring-context-7.0.10.jar;C:\Users\ycuauro\.m2\repository\com\google\cloud\google-cloud-storage\2.76.0\google-cloud-storage-2.76.0.jar;C:\Users\ycuauro\.m2\repository\com\fasterxml\jackson\dataformat\jackson-dataformat-xml\2.21.7\jackson-dataformat-xml-2.21.7.jar;C:\Users\ycuauro\.m2\repository\org\codehaus\woodstox\stax2-api\4.3.0\stax2-api-4.3.0.jar;C:\Users\ycuauro\.m2\repository\com\fasterxml\woodstox\woodstox-core\7.2.0\woodstox-core-7.2.0.jar;C:\Users\ycuauro\.m2\repository\com\fasterxml\jackson\datatype\jackson-datatype-jsr310\2.21.7\jackson-datatype-jsr310-2.21.7.jar;C:\Users\ycuauro\.m2\repository\com\google\http-client\google-http-client-jackson2\2.2.0\google-http-client-jackson2-2.2.0.jar;C:\Users\ycuauro\.m2\repository\com\google\api-client\google-api-client\2.9.2\google-api-client-2.9.2.jar;C:\Users\ycuauro\.m2\repository\com\google\oauth-client\google-oauth-client\1.39.0\google-oauth-client-1.39.0.jar;C:\Users\ycuauro\.m2\repository\com\google\http-client\google-http-client-apache-v2\2.2.0\google-http-client-apache-v2-2.2.0.jar;C:\Users\ycuauro\.m2\repository\com\google\apis\google-api-services-storage\v1-rev20260524-2.0.0\google-api-services-storage-v1-rev20260524-2.0.0.jar;C:\Users\ycuauro\.m2\repository\com\google\cloud\google-cloud-core-http\2.78.0\google-cloud-core-http-2.78.0.jar;C:\Users\ycuauro\.m2\repository\com\google\http-client\google-http-client-appengine\2.2.0\google-http-client-appengine-2.2.0.jar;C:\Users\ycuauro\.m2\repository\com\google\cloud\google-cloud-core-grpc\2.78.0\google-cloud-core-grpc-2.78.0.jar;C:\Users\ycuauro\.m2\repository\com\google\api\grpc\proto-google-cloud-storage-v2\2.76.0\proto-google-cloud-storage-v2-2.76.0.jar;C:\Users\ycuauro\.m2\repository\com\google\api\grpc\grpc-google-cloud-storage-v2\2.76.0\grpc-google-cloud-storage-v2-2.76.0.jar;C:\Users\ycuauro\.m2\repository\com\google\api\grpc\gapic-google-cloud-storage-v2\2.76.0\gapic-google-cloud-storage-v2-2.76.0.jar;C:\Users\ycuauro\.m2\repository\io\opentelemetry\opentelemetry-sdk\1.62.0\opentelemetry-sdk-1.62.0.jar;C:\Users\ycuauro\.m2\repository\io\opentelemetry\opentelemetry-sdk-trace\1.62.0\opentelemetry-sdk-trace-1.62.0.jar;C:\Users\ycuauro\.m2\repository\io\opentelemetry\opentelemetry-sdk-logs\1.62.0\opentelemetry-sdk-logs-1.62.0.jar;C:\Users\ycuauro\.m2\repository\io\grpc\grpc-opentelemetry\1.83.0\grpc-opentelemetry-1.83.0.jar;C:\Users\ycuauro\.m2\repository\io\opentelemetry\opentelemetry-sdk-metrics\1.62.0\opentelemetry-sdk-metrics-1.62.0.jar;C:\Users\ycuauro\.m2\repository\io\opentelemetry\opentelemetry-sdk-common\1.62.0\opentelemetry-sdk-common-1.62.0.jar;C:\Users\ycuauro\.m2\repository\io\opentelemetry\opentelemetry-sdk-extension-autoconfigure-spi\1.62.0\opentelemetry-sdk-extension-autoconfigure-spi-1.62.0.jar;C:\Users\ycuauro\.m2\repository\io\opentelemetry\semconv\opentelemetry-semconv\1.29.0-alpha\opentelemetry-semconv-1.29.0-alpha.jar;C:\Users\ycuauro\.m2\repository\com\google\cloud\opentelemetry\exporter-metrics\0.33.0\exporter-metrics-0.33.0.jar;C:\Users\ycuauro\.m2\repository\com\google\cloud\google-cloud-monitoring\3.101.0\google-cloud-monitoring-3.101.0.jar;C:\Users\ycuauro\.m2\repository\com\google\api\grpc\proto-google-cloud-monitoring-v3\3.101.0\proto-google-cloud-monitoring-v3-3.101.0.jar;C:\Users\ycuauro\.m2\repository\io\grpc\grpc-grpclb\1.83.0\grpc-grpclb-1.83.0.jar;C:\Users\ycuauro\.m2\repository\com\google\cloud\opentelemetry\shared-resourcemapping\0.33.0\shared-resourcemapping-0.33.0.jar;C:\Users\ycuauro\.m2\repository\io\opentelemetry\contrib\opentelemetry-gcp-resources\1.37.0-alpha\opentelemetry-gcp-resources-1.37.0-alpha.jar;C:\Users\ycuauro\.m2\repository\com\google\cloud\opentelemetry\detector-resources-support\0.31.0\detector-resources-support-0.31.0.jar;C:\Users\ycuauro\.m2\repository\io\grpc\grpc-rls\1.83.0\grpc-rls-1.83.0.jar;C:\Users\ycuauro\.m2\repository\org\postgresql\postgresql\42.7.14\postgresql-42.7.14.jar;C:\Users\ycuauro\.m2\repository\org\checkerframework\checker-qual\3.55.1\checker-qual-3.55.1.jar;C:\Users\ycuauro\.m2\repository\com\mysql\mysql-connector-j\9.7.0\mysql-connector-j-9.7.0.jar;C:\Users\ycuauro\.m2\repository\org\projectlombok\lombok\1.18.48\lombok-1.18.48.jar;C:\Users\ycuauro\.m2\repository\com\alibaba\easyexcel\3.3.2\easyexcel-3.3.2.jar;C:\Users\ycuauro\.m2\repository\com\alibaba\easyexcel-core\3.3.2\easyexcel-core-3.3.2.jar;C:\Users\ycuauro\.m2\repository\com\alibaba\easyexcel-support\3.3.2\easyexcel-support-3.3.2.jar;C:\Users\ycuauro\.m2\repository\org\apache\poi\poi\4.1.2\poi-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\apache\commons\commons-collections4\4.4\commons-collections4-4.4.jar;C:\Users\ycuauro\.m2\repository\org\apache\commons\commons-math3\3.6.1\commons-math3-3.6.1.jar;C:\Users\ycuauro\.m2\repository\com\zaxxer\SparseBitSet\1.2\SparseBitSet-1.2.jar;C:\Users\ycuauro\.m2\repository\org\apache\poi\poi-ooxml\4.1.2\poi-ooxml-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\apache\commons\commons-compress\1.19\commons-compress-1.19.jar;C:\Users\ycuauro\.m2\repository\com\github\virtuald\curvesapi\1.06\curvesapi-1.06.jar;C:\Users\ycuauro\.m2\repository\org\apache\poi\poi-ooxml-schemas\4.1.2\poi-ooxml-schemas-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\apache\xmlbeans\xmlbeans\3.1.0\xmlbeans-3.1.0.jar;C:\Users\ycuauro\.m2\repository\org\apache\commons\commons-csv\1.8\commons-csv-1.8.jar;C:\Users\ycuauro\.m2\repository\org\ehcache\ehcache\3.12.0\ehcache-3.12.0.jar;C:\Users\ycuauro\.m2\repository\javax\cache\cache-api\1.1.1\cache-api-1.1.1.jar;C:\Users\ycuauro\.m2\repository\org\glassfish\jaxb\jaxb-runtime\4.0.9\jaxb-runtime-4.0.9.jar;C:\Users\ycuauro\.m2\repository\org\glassfish\jaxb\jaxb-core\4.0.9\jaxb-core-4.0.9.jar;C:\Users\ycuauro\.m2\repository\org\glassfish\jaxb\txw2\4.0.9\txw2-4.0.9.jar;C:\Users\ycuauro\.m2\repository\com\sun\istack\istack-commons-runtime\4.1.2\istack-commons-runtime-4.1.2.jar;C:\Users\ycuauro\.m2\repository\commons-io\commons-io\2.11.0\commons-io-2.11.0.jar;C:\Users\ycuauro\.m2\repository\jakarta\xml\bind\jakarta.xml.bind-api\4.0.5\jakarta.xml.bind-api-4.0.5.jar;C:\Users\ycuauro\.m2\repository\jakarta\activation\jakarta.activation-api\2.1.4\jakarta.activation-api-2.1.4.jar;C:\Users\ycuauro\.m2\repository\net\bytebuddy\byte-buddy\1.18.15\byte-buddy-1.18.15.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-web-server\4.1.2\spring-boot-web-server-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-starter-thymeleaf\4.1.2\spring-boot-starter-thymeleaf-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-thymeleaf\4.1.2\spring-boot-thymeleaf-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\thymeleaf\thymeleaf-spring6\3.1.5.RELEASE\thymeleaf-spring6-3.1.5.RELEASE.jar;C:\Users\ycuauro\.m2\repository\org\thymeleaf\thymeleaf\3.1.5.RELEASE\thymeleaf-3.1.5.RELEASE.jar;C:\Users\ycuauro\.m2\repository\org\attoparser\attoparser\2.0.7.RELEASE\attoparser-2.0.7.RELEASE.jar;C:\Users\ycuauro\.m2\repository\org\unbescape\unbescape\1.1.6.RELEASE\unbescape-1.1.6.RELEASE.jar;C:\Users\ycuauro\.m2\repository\com\openhtmltopdf\openhtmltopdf-pdfbox\1.0.10\openhtmltopdf-pdfbox-1.0.10.jar;C:\Users\ycuauro\.m2\repository\org\apache\pdfbox\pdfbox\2.0.24\pdfbox-2.0.24.jar;C:\Users\ycuauro\.m2\repository\org\apache\pdfbox\fontbox\2.0.24\fontbox-2.0.24.jar;C:\Users\ycuauro\.m2\repository\commons-logging\commons-logging\1.3.6\commons-logging-1.3.6.jar;C:\Users\ycuauro\.m2\repository\org\apache\pdfbox\xmpbox\2.0.24\xmpbox-2.0.24.jar;C:\Users\ycuauro\.m2\repository\com\openhtmltopdf\openhtmltopdf-core\1.0.10\openhtmltopdf-core-1.0.10.jar;C:\Users\ycuauro\.m2\repository\de\rototor\pdfbox\graphics2d\0.32\graphics2d-0.32.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-starter-mail\4.1.2\spring-boot-starter-mail-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-mail\4.1.2\spring-boot-mail-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\spring-context-support\7.0.10\spring-context-support-7.0.10.jar;C:\Users\ycuauro\.m2\repository\jakarta\mail\jakarta.mail-api\2.1.5\jakarta.mail-api-2.1.5.jar;C:\Users\ycuauro\.m2\repository\org\eclipse\angus\angus-mail\2.0.5\angus-mail-2.0.5.jar;C:\Users\ycuauro\.m2\repository\org\eclipse\angus\angus-activation\2.0.3\angus-activation-2.0.3.jar;C:\Users\ycuauro\.m2\repository\com\sendgrid\sendgrid-java\4.10.2\sendgrid-java-4.10.2.jar;C:\Users\ycuauro\.m2\repository\com\sendgrid\java-http-client\4.5.0\java-http-client-4.5.0.jar;C:\Users\ycuauro\.m2\repository\org\apache\httpcomponents\httpcore\4.4.16\httpcore-4.4.16.jar;C:\Users\ycuauro\.m2\repository\org\apache\httpcomponents\httpclient\4.5.13\httpclient-4.5.13.jar;C:\Users\ycuauro\.m2\repository\com\fasterxml\jackson\core\jackson-core\2.21.7\jackson-core-2.21.7.jar;C:\Users\ycuauro\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.21\jackson-annotations-2.21.jar;C:\Users\ycuauro\.m2\repository\com\fasterxml\jackson\core\jackson-databind\2.21.7\jackson-databind-2.21.7.jar;C:\Users\ycuauro\.m2\repository\org\bouncycastle\bcprov-jdk18on\1.76\bcprov-jdk18on-1.76.jar;C:\Users\ycuauro\.m2\repository\io\github\cdimascio\dotenv-java\3.0.0\dotenv-java-3.0.0.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-starter-security\4.1.2\spring-boot-starter-security-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\boot\spring-boot-security\4.1.2\spring-boot-security-4.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\security\spring-security-config\7.1.2\spring-security-config-7.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\security\spring-security-core\7.1.2\spring-security-core-7.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\security\spring-security-crypto\7.1.2\spring-security-crypto-7.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\security\spring-security-web\7.1.2\spring-security-web-7.1.2.jar;C:\Users\ycuauro\.m2\repository\org\springframework\spring-aop\7.0.10\spring-aop-7.0.10.jar;C:\Users\ycuauro\.m2\repository\org\springframework\spring-beans\7.0.10\spring-beans-7.0.10.jar;C:\Users\ycuauro\.m2\repository\org\springframework\spring-core\7.0.10\spring-core-7.0.10.jar;C:\Users\ycuauro\.m2\repository\org\jspecify\jspecify\1.0.1\jspecify-1.0.1.jar;C:\Users\ycuauro\.m2\repository\org\aspectj\aspectjweaver\1.9.25.1\aspectjweaver-1.9.25.1.jar;C:\Users\ycuauro\.m2\repository\io\jsonwebtoken\jjwt-api\0.12.6\jjwt-api-0.12.6.jar;C:\Users\ycuauro\.m2\repository\io\jsonwebtoken\jjwt-impl\0.12.6\jjwt-impl-0.12.6.jar;C:\Users\ycuauro\.m2\repository\io\jsonwebtoken\jjwt-jackson\0.12.6\jjwt-jackson-0.12.6.jar
+Launcher Type: SUN_STANDARD
+
+[Global flags]
+     intx CICompilerCount                          = 3                                         {product} {ergonomic}
+     uint ConcGCThreads                            = 2                                         {product} {ergonomic}
+     uint G1ConcRefinementThreads                  = 6                                         {product} {ergonomic}
+   size_t G1HeapRegionSize                         = 1048576                                   {product} {ergonomic}
+    uintx GCDrainStackTargetSize                   = 64                                        {product} {ergonomic}
+   size_t InitialHeapSize                          = 123731968                                 {product} {ergonomic}
+     bool ManagementServer                         = true                                      {product} {command line}
+   size_t MarkStackSize                            = 4194304                                   {product} {ergonomic}
+   size_t MaxHeapSize                              = 1975517184                                {product} {ergonomic}
+   size_t MinHeapDeltaBytes                        = 1048576                                   {product} {ergonomic}
+   size_t MinHeapSize                              = 8388608                                   {product} {ergonomic}
+    uintx NonNMethodCodeHeapSize                   = 5832780                                {pd product} {ergonomic}
+    uintx NonProfiledCodeHeapSize                  = 122912730                              {pd product} {ergonomic}
+    uintx ProfiledCodeHeapSize                     = 122912730                              {pd product} {ergonomic}
+    uintx ReservedCodeCacheSize                    = 251658240                              {pd product} {ergonomic}
+     bool SegmentedCodeCache                       = true                                      {product} {ergonomic}
+     bool ShowCodeDetailsInExceptionMessages       = true                                   {manageable} {command line}
+   size_t SoftMaxHeapSize                          = 1975517184                             {manageable} {ergonomic}
+     bool UseCompressedOops                        = true                           {product lp64_product} {ergonomic}
+     bool UseG1GC                                  = true                                      {product} {ergonomic}
+     bool UseLargePagesIndividualAllocation        = false                                  {pd product} {ergonomic}
+
+Logging:
+Log output configuration:
+ #0: stdout all=warning uptime,level,tags foldmultilines=false
+ #1: stderr all=off uptime,level,tags foldmultilines=false
+
+Environment Variables:
+JAVA_HOME=C:\Program Files\Java\jdk-21.0.11
+PATH=C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\nodejs\;C:\Program Files\MySQL\MySQL Server 9.7\bin;C:\Program Files\Java\jdk-21.0.11\bin;C:\Users\ycuauro\AppData\Local\Microsoft\WindowsApps;C:\Users\ycuauro\AppData\Roaming\npm;C:\Users\ycuauro\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\ycuauro\AppData\Local\Programs\DockerDesktop\resources\bin;C:\Users\ycuauro\AppData\Local\Programs\Git\cmd;C:\Users\ycuauro\AppData\Local\Programs\Warp\bin;C:\Users\ycuauro\AppData\Local\Programs\Ollama;C:\Users\ycuauro\AppData\Local\Programs\Microsoft VS Code\bin\copilot-shim;C:\Users\ycuauro\AppData\Local\Google\Cloud SDK\google-cloud-sdk\bin;c:\Users\ycuauro\.vscode\extensions\vscjava.vscode-java-debug-0.60.0\bundled\scripts\noConfigScripts;c:\Users\ycuauro\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\debugCommand;C:\Users\ycuauro\AppData\Local\Programs\Microsoft VS Code\bin\copilot-shim
+USERNAME=ycuauro
+LANG=en_US.UTF-8
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=AMD64 Family 23 Model 96 Stepping 1, AuthenticAMD
+TMP=C:\Users\ycuauro\AppData\Local\Temp
+TEMP=C:\Users\ycuauro\AppData\Local\Temp
+
+
+
+
+Periodic native trim disabled
+
+---------------  S Y S T E M  ---------------
+
+OS:
+ Windows 11 , 64 bit Build 26100 (10.0.26100.9711)
+OS uptime: 1 days 7:37 hours
+Hyper-V role detected
+
+CPU: total 6 (initial active 6) (6 cores per cpu, 1 threads per core) family 23 model 96 stepping 1 microcode 0x8600104, cx8, cmov, fxsr, mmx, 3dnowpref, sse, sse2, sse3, ssse3, sse4a, sse4.1, sse4.2, popcnt, lzcnt, tsc, tscinvbit, avx, avx2, aes, clmul, bmi1, bmi2, adx, sha, fma, vzeroupper, clflush, clflushopt, hv, rdtscp, rdpid, f16c
+Processor Information for all 6 processors :
+  Max Mhz: 2375, Current Mhz: 2375, Mhz Limit: 2375
+
+Memory: 4k page, system-wide physical 7533M (123M free)
+TotalPageFile size 31085M (AvailPageFile size 4M)
+current process WorkingSet (physical memory assigned to process): 14M, peak: 14M
+current process commit charge ("private bytes"): 59M, peak: 177M
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (21.0.11+9-LTS-211) for windows-amd64 JRE (21.0.11+9-LTS-211), built on 2026-03-11T00:23:15Z by "mach5run" with MS VC++ 17.13 (VS2022)
+
+END.

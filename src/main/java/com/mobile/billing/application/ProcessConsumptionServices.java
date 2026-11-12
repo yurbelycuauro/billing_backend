@@ -4,7 +4,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,8 +41,9 @@ public class ProcessConsumptionServices implements ProcessConsumptionUseCase {
     }
 
     @Override
+    @Async("consumptionTaskExecutor")
     @Transactional
-    public void processConsumption(ProcessConsumptionCommand command) {
+    public CompletableFuture<Void> processConsumption(ProcessConsumptionCommand command) {
         Long tenantId = tenantContext.getTenantId();
         if (tenantId == null) {
             throw new IllegalStateException("Tenant context is required to process consumption.");
@@ -56,6 +59,7 @@ public class ProcessConsumptionServices implements ProcessConsumptionUseCase {
         consumptionDetailRepositoryPort.saveAll(consumptionDetails);
         log.info("Finalizó el procesamiento de consumos para año: {} y mes: {}",
                 command.anioPeriodo(), command.mesPeriodo());
+        return CompletableFuture.completedFuture(null);
     }
 
     private void registerMissingCustomers(List<ConsumptionDetail> consumptionDetails, Long tenantId) {

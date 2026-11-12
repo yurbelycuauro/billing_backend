@@ -2,7 +2,7 @@ name: Deploy API to Google Cloud Run
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 permissions:
   contents: read
@@ -13,7 +13,7 @@ env:
   REGION: us-central1
   REPOSITORY: billing-repo
   SERVICE_NAME: billing-api
-  IMAGE_URL: us-central1-docker.pkg.dev/mi-billing-api-2026/billing-repo/billing-api
+  APP_PUBSUB_TOPIC_ID: ${{ vars.APP_PUBSUB_TOPIC_ID }}
 
 jobs:
   deploy:
@@ -25,9 +25,9 @@ jobs:
       - name: Configurar Java 21
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
-          distribution: 'temurin'
-          cache: 'maven'
+          java-version: "21"
+          distribution: "temurin"
+          cache: "maven"
 
       - name: Compilar con Maven
         run: mvn clean package -DskipTests
@@ -40,23 +40,30 @@ jobs:
 
       - name: Configurar gcloud CLI
         uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.PROJECT_ID }}
 
       - name: Autenticar Docker con Artifact Registry
-        run: gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+        run: gcloud auth configure-docker "${REGION}-docker.pkg.dev" --quiet
 
       - name: Construir y subir imagen Docker
         run: |
-          docker build -t ${{ env.IMAGE_URL }}:${{ github.sha }} -t ${{ env.IMAGE_URL }}:latest .
-          docker push ${{ env.IMAGE_URL }}:${{ github.sha }}
-          docker push ${{ env.IMAGE_URL }}:latest
+          IMAGE_URL="${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${SERVICE_NAME}"
+          docker build -t "${IMAGE_URL}:${GITHUB_SHA}" -t "${IMAGE_URL}:latest" .
+          docker push "${IMAGE_URL}:${GITHUB_SHA}"
+          docker push "${IMAGE_URL}:latest"
       - name: Desplegar en Cloud Run
         run: |
+          IMAGE_URL="${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${SERVICE_NAME}"
+          export IMAGE_URL
           python - <<'PY'
           import json
           import os
 
           environment = {
               "DB_PROFILE": "postgresql",
+              "GCP_PROJECT_ID": os.environ["PROJECT_ID"],
+              "APP_PUBSUB_TOPIC_ID": os.environ["APP_PUBSUB_TOPIC_ID"],
               "SPRING_DATASOURCE_URL": os.environ["SPRING_DATASOURCE_URL"],
               "SPRING_DATASOURCE_USERNAME": os.environ["SPRING_DATASOURCE_USERNAME"],
               "SPRING_DATASOURCE_PASSWORD": os.environ["SPRING_DATASOURCE_PASSWORD"],
@@ -66,12 +73,15 @@ jobs:
               "INITIAL_ADMIN_USERNAME": os.environ["INITIAL_ADMIN_USERNAME"],
               "INITIAL_ADMIN_PASSWORD": os.environ["INITIAL_ADMIN_PASSWORD"],
               "BANCO_CENTRAL_TOKEN": os.environ["BANCO_CENTRAL_TOKEN"],
+              "GCP_STORAGE_BUCKET": os.environ["STORAGE_BUCKET"],
+
           }
           missing = [key for key, value in environment.items() if not value.strip()]
           if missing:
               raise SystemExit("Missing required deployment values: " + ", ".join(missing))
 
           print("Database profile: postgresql")
+          print("Google Cloud project and Pub/Sub topic: configured (values hidden)")
           print("Supabase JDBC URL: configured (value hidden)")
           print("Supabase username/password: configured (values hidden)")
           print("JWT, SendGrid, admin, and Banco Central secrets: configured (values hidden)")
@@ -79,9 +89,10 @@ jobs:
           with open(os.path.join(os.environ["RUNNER_TEMP"], "cloud-run-env.json"), "w") as env_file:
               json.dump(environment, env_file)
           PY
-          gcloud run deploy ${{ env.SERVICE_NAME }} \
-            --image ${{ env.IMAGE_URL }}:${{ github.sha }} \
-            --region ${{ env.REGION }} \
+          gcloud run deploy "$SERVICE_NAME" \
+            --project "$PROJECT_ID" \
+            --image "${IMAGE_URL}:${GITHUB_SHA}" \
+            --region "$REGION" \
             --platform managed \
             --allow-unauthenticated \
             --min-instances=0 \
@@ -97,3 +108,4 @@ jobs:
           INITIAL_ADMIN_USERNAME: ${{ secrets.INITIAL_ADMIN_USERNAME }}
           INITIAL_ADMIN_PASSWORD: ${{ secrets.INITIAL_ADMIN_PASSWORD }}
           BANCO_CENTRAL_TOKEN: ${{ secrets.BANCO_CENTRAL_TOKEN }}
+          STORAGE_BUCKET: ${{ vars.STORAGE_BUCKET }}
